@@ -1,0 +1,7779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MIITY WALLET • Admin Dashboard</title>
+
+<style>
+:root{
+  --green:#087f4e;
+  --green-dark:#05633d;
+  --green-soft:#e8f6ef;
+  --ink:#14201a;
+  --muted:#708078;
+  --bg:#f5faf7;
+  --card:#fff;
+  --line:#e4ece7;
+  --danger:#c63d3d;
+  --shadow:0 14px 40px rgba(9,54,34,.08)
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--ink)
+}
+
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+
+.app{
+  display:flex;
+  min-height:100vh
+}
+
+.sidebar{
+  width:252px;
+  background:#fff;
+  border-right:1px solid var(--line);
+  padding:22px 16px;
+  position:fixed;
+  inset:0 auto 0 0;
+  z-index:40;
+  display:flex;
+  flex-direction:column
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:5px 10px 25px
+}
+
+.brand-mark{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:var(--green);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  font-size:17px;
+  box-shadow:0 8px 18px rgba(8,127,78,.2)
+}
+
+.brand strong{
+  font-size:18px;
+  letter-spacing:-.4px
+}
+
+.brand small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:2px;
+  letter-spacing:.6px
+}
+
+.nav-title{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  color:#9aa8a1;
+  font-weight:800;
+  padding:10px 12px
+}
+
+.nav{
+  display:grid;
+  gap:4px
+}
+
+.nav button{
+  border:0;
+  background:transparent;
+  color:#596760;
+  padding:12px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-align:left;
+  width:100%;
+  font-weight:650
+}
+
+.nav button:hover,
+.nav button.active{
+  background:var(--green-soft);
+  color:var(--green)
+}
+
+.nav-icon{
+  width:20px;
+  text-align:center;
+  font-size:16px;
+  font-weight:800
+}
+
+.sidebar-bottom{
+  margin-top:auto;
+  border-top:1px solid var(--line);
+  padding-top:14px
+}
+
+.admin-mini{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px
+}
+
+.avatar{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#dff1e8;
+  color:var(--green);
+  display:grid;
+  place-items:center;
+  font-weight:800
+}
+
+.admin-mini strong{font-size:13px}
+
+.admin-mini small{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:2px
+}
+
+.main{
+  margin-left:252px;
+  width:calc(100% - 252px)
+}
+
+.topbar{
+  height:76px;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 30px;
+  position:sticky;
+  top:0;
+  z-index:20
+}
+
+.page-title h1{
+  margin:0;
+  font-size:22px;
+  letter-spacing:-.5px
+}
+
+.page-title p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:12px
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px
+}
+
+.icon-btn,
+.mobile-menu{
+  border:1px solid var(--line);
+  background:#fff;
+  width:40px;
+  height:40px;
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  color:#56645d
+}
+
+.mobile-menu{display:none}
+
+.content{
+  padding:28px 30px 45px;
+  max-width:1500px;
+  margin:auto
+}
+
+.hero{
+  background:linear-gradient(135deg,#073d2b,#0b6040);
+  border-radius:20px;
+  padding:25px;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  box-shadow:0 15px 35px rgba(4,65,42,.12);
+  animation:rise .55s ease both
+}
+
+.hero .eyebrow{
+  font-size:9px;
+  letter-spacing:1.5px;
+  font-weight:900;
+  color:#9ff3ce
+}
+
+.hero h2{
+  margin:4px 0;
+  font-size:24px
+}
+
+.hero p{
+  margin:0;
+  color:#cfe8dc;
+  font-size:11px
+}
+
+.primary{
+  border:1px solid var(--green);
+  background:var(--green);
+  color:#fff;
+  border-radius:10px;
+  padding:11px 15px;
+  font-weight:850
+}
+
+.primary:hover{background:var(--green-dark)}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin:18px 0
+}
+
+.stat,
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:var(--shadow)
+}
+
+.stat{padding:17px}
+
+.stat-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+
+.stat-label{
+  font-size:9px;
+  letter-spacing:.9px;
+  color:var(--muted);
+  font-weight:900
+}
+
+.stat-icon{
+  width:30px;
+  height:30px;
+  border-radius:9px;
+  background:var(--green-soft);
+  color:var(--green);
+  display:grid;
+  place-items:center;
+  font-weight:900
+}
+
+.stat strong{
+  display:block;
+  font-size:23px;
+  margin-top:11px
+}
+
+.stat small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px
+}
+
+.card{overflow:hidden}
+
+.card-head{
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+
+.card-head h3{
+  margin:0;
+  font-size:14px
+}
+
+.card-head p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:10px
+}
+
+.search{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:10px;
+  padding:10px 12px;
+  outline:none;
+  width:min(300px,100%);
+  font-size:11px
+}
+
+.search:focus,
+.field input:focus,
+.field select:focus,
+textarea:focus{
+  border-color:#8dc8a9;
+  box-shadow:0 0 0 3px #eaf7f0;
+  outline:none
+}
+
+.staff-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  padding:18px
+}
+
+.staff-card{
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:16px;
+  background:#fbfdfc;
+  transition:.2s;
+  cursor:pointer
+}
+
+.staff-card:hover{
+  transform:translateY(-2px);
+  border-color:#b9ddca;
+  box-shadow:0 12px 30px rgba(9,54,34,.08)
+}
+
+.staff-top{
+  display:flex;
+  align-items:center;
+  gap:12px
+}
+
+.staff-avatar{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  background:var(--green-soft);
+  color:var(--green);
+  display:grid;
+  place-items:center;
+  font-weight:900
+}
+
+.staff-name{
+  font-weight:900;
+  font-size:13px
+}
+
+.staff-email{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
+  word-break:break-word
+}
+
+.staff-meta{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:15px
+}
+
+.mini{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:10px;
+  padding:9px
+}
+
+.mini span{
+  display:block;
+  color:var(--muted);
+  font-size:8px;
+  text-transform:uppercase;
+  font-weight:800
+}
+
+.mini strong{
+  display:block;
+  margin-top:4px;
+  font-size:12px
+}
+
+.empty,
+.loading{
+  text-align:center;
+  color:var(--muted);
+  padding:45px 18px;
+  font-size:11px
+}
+
+.detail{
+  display:none;
+  animation:rise .35s ease both
+}
+
+.detail.active{display:block}
+
+.back-link{
+  border:0;
+  background:transparent;
+  color:var(--green);
+  font-weight:850;
+  padding:0;
+  margin-bottom:15px;
+  font-size:11px
+}
+
+.staff-hero{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  box-shadow:var(--shadow);
+  margin-bottom:15px
+}
+
+.staff-identity{
+  display:flex;
+  align-items:center;
+  gap:13px
+}
+
+.big-avatar{
+  width:55px;
+  height:55px;
+  border-radius:16px;
+  background:var(--green);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-size:17px;
+  font-weight:900
+}
+
+.staff-identity h2{
+  margin:0;
+  font-size:18px
+}
+
+.staff-identity p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:10px
+}
+
+.tabs{
+  display:flex;
+  gap:5px;
+  overflow:auto;
+  padding:5px;
+  background:#edf6f1;
+  border:1px solid #dcece4;
+  border-radius:12px;
+  margin-bottom:15px
+}
+
+.tab{
+  border:0;
+  background:transparent;
+  color:#607069;
+  border-radius:9px;
+  padding:9px 12px;
+  font-size:10px;
+  font-weight:850;
+  white-space:nowrap
+}
+
+.tab.active{
+  background:#fff;
+  color:var(--green);
+  box-shadow:0 2px 10px rgba(9,54,34,.08)
+}
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:1.4fr .8fr;
+  gap:15px
+}
+
+.table-wrap{overflow:auto}
+
+.table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px
+}
+
+.table th,
+.table td{
+  text-align:left;
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+  font-size:10px
+}
+
+.table th{
+  color:var(--muted);
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.6px
+}
+
+.table td strong{font-size:10px}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  border-radius:99px;
+  padding:5px 8px;
+  font-size:8px;
+  font-weight:900
+}
+
+.paid,
+.approved{
+  background:#e6f7ee;
+  color:#087f4e
+}
+
+.notpaid{
+  background:#fff1ef;
+  color:#b53b35
+}
+
+.pending{
+  background:#fff6e7;
+  color:#9b681d
+}
+
+.read{
+  background:#eef2f0;
+  color:#53655c
+}
+
+.operation-list{
+  padding:14px;
+  display:grid;
+  gap:9px
+}
+
+.operation{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  background:#fbfdfc
+}
+
+.operation strong{font-size:11px}
+
+.operation small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-top:4px
+}
+
+.money{
+  font-weight:900;
+  color:var(--green);
+  white-space:nowrap
+}
+
+.panel-body{padding:15px}
+
+.message-box{
+  display:grid;
+  gap:10px
+}
+
+textarea{
+  width:100%;
+  min-height:115px;
+  resize:vertical;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:12px;
+  background:#fff;
+  font-size:11px
+}
+
+.form-list{
+  display:grid;
+  gap:9px
+}
+
+.form-item{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:13px;
+  background:#fbfdfc
+}
+
+.form-item-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px
+}
+
+.form-item strong{font-size:11px}
+
+.form-item p{
+  margin:7px 0;
+  color:#53655c;
+  font-size:10px;
+  line-height:1.5
+}
+
+.form-actions{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap
+}
+
+.secondary,
+.danger{
+  border-radius:9px;
+  padding:8px 11px;
+  font-size:9px;
+  font-weight:850
+}
+
+.secondary{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--green)
+}
+
+.danger{
+  border:1px solid #f0c7c5;
+  background:#fff7f6;
+  color:var(--danger)
+}
+
+.transfer{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:10px;
+  align-items:end
+}
+
+.field{
+  display:grid;
+  gap:6px
+}
+
+.field label{
+  font-size:9px;
+  color:var(--muted);
+  font-weight:850
+}
+
+.field input,
+.field select{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:10px;
+  background:#fff;
+  font-size:11px
+}
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:100;
+  background:#073d2b;
+  color:#fff;
+  padding:12px 15px;
+  border-radius:11px;
+  box-shadow:0 15px 35px rgba(0,0,0,.18);
+  font-size:10px;
+  display:none
+}
+
+.toast.show{
+  display:block;
+  animation:rise .25s ease both
+}
+
+@keyframes rise{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
+}
+
+.notification-menu{position:relative}
+
+.notification-button{
+  position:relative;
+  font-size:17px;
+  font-weight:900
+}
+
+.notification-badge{
+  position:absolute;
+  right:2px;
+  top:1px;
+  min-width:17px;
+  height:17px;
+  padding:0 4px;
+  border-radius:99px;
+  background:#e5484d;
+  color:#fff;
+  font-size:8px;
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:2px solid #fff
+}
+
+.notification-panel{
+  position:absolute;
+  right:0;
+  top:48px;
+  width:min(390px,calc(100vw - 28px));
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 20px 55px rgba(9,54,34,.16);
+  display:none;
+  overflow:hidden;
+  z-index:1200
+}
+
+.notification-panel.open{display:block}
+
+.notification-head{
+  padding:14px 15px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start
+}
+
+.notification-head strong{font-size:13px}
+
+.notification-head small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px
+}
+
+.notification-list{
+  max-height:370px;
+  overflow:auto;
+  padding:10px
+}
+
+.notification-item{
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#f8fcfa;
+  margin-bottom:8px;
+  cursor:pointer
+}
+
+.notification-item:hover{background:#eef8f3}
+
+.notification-cancel{
+  border:0;
+  background:#eef5f1;
+  color:#6a7b73;
+  width:28px;
+  height:28px;
+  border-radius:8px;
+  font-size:17px;
+  font-weight:900;
+  display:grid;
+  place-items:center;
+  flex:0 0 auto
+}
+
+.notification-cancel:hover{
+  background:#ffeceb;
+  color:var(--danger)
+}
+
+.notification-item strong{
+  font-size:11px;
+  display:block
+}
+
+.notification-item p{
+  margin:5px 0 0;
+  font-size:10px;
+  line-height:1.5;
+  color:#4f655a
+}
+
+.notification-item small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-top:7px
+}
+
+.notification-empty{
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  padding:40px 15px
+}
+
+.loan-request-list{
+  display:grid;
+  gap:9px;
+  padding:14px
+}
+
+.loan-request{
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:13px;
+  background:#fbfdfc
+}
+
+.loan-request-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start
+}
+
+.loan-request strong{font-size:12px}
+
+.loan-request p{
+  margin:6px 0;
+  color:#53655c;
+  font-size:10px;
+  line-height:1.5
+}
+
+.loan-request-meta{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  color:var(--muted);
+  font-size:9px
+}
+
+.loan-request-actions{
+  display:flex;
+  gap:7px;
+  margin-top:10px;
+  flex-wrap:wrap
+}
+
+.loan-request-actions button{
+  border-radius:9px;
+  padding:8px 11px;
+  font-size:9px;
+  font-weight:850
+}
+
+.approve-loan{
+  border:1px solid var(--green);
+  background:var(--green);
+  color:#fff
+}
+
+.reject-loan{
+  border:1px solid #f0c7c5;
+  background:#fff7f6;
+  color:var(--danger)
+}
+
+.passport-thumb{
+  width:58px;
+  height:68px;
+  object-fit:cover;
+  border-radius:9px;
+  border:1px solid var(--line);
+  float:right;
+  margin-left:10px
+}
+
+.loan-request-actions .view-loan{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--green);
+  border-radius:9px;
+  padding:8px 11px;
+  font-size:9px;
+  font-weight:850
+}
+
+.review-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(5,25,18,.58);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:100
+}
+
+.review-modal.open{display:flex}
+
+.review-box{
+  width:min(760px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 25px 80px rgba(0,0,0,.25)
+}
+
+.review-head{
+  padding:18px 20px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:flex-start
+}
+
+.review-head h2{
+  margin:2px 0 0;
+  font-size:18px
+}
+
+.review-head small{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.8px
+}
+
+.review-body{padding:18px}
+
+.review-passport{
+  width:125px;
+  height:150px;
+  object-fit:cover;
+  border-radius:14px;
+  border:1px solid var(--line);
+  float:right;
+  margin:0 0 14px 16px
+}
+
+.review-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  clear:both
+}
+
+.review-field{
+  border:1px solid var(--line);
+  background:#fbfdfc;
+  border-radius:11px;
+  padding:10px
+}
+
+.review-field span{
+  display:block;
+  color:var(--muted);
+  font-size:8px;
+  text-transform:uppercase;
+  font-weight:850
+}
+
+.review-field strong{
+  display:block;
+  margin-top:5px;
+  font-size:11px;
+  word-break:break-word
+}
+
+.review-actions{
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  padding:15px 18px;
+  border-top:1px solid var(--line);
+  position:sticky;
+  bottom:0;
+  background:#fff
+}
+
+.printout-view-btn{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--green);
+  border-radius:8px;
+  padding:6px 9px;
+  font-size:8px;
+  font-weight:850
+}
+
+/* Admin workspace split */
+.section-view{display:none}
+.section-view.active{
+  display:block;
+  animation:rise .3s ease both
+}
+
+.profile-button{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:11px;
+  padding:5px 9px 5px 5px;
+  color:var(--ink);
+  font-weight:800;
+  font-size:10px
+}
+
+.profile-button .avatar{
+  width:30px;
+  height:30px
+}
+
+.monitor-note{
+  font-size:10px;
+  color:var(--muted);
+  margin-top:5px
+}
+
+.monitor-summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  padding:14px
+}
+
+.monitor-stat{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px;
+  background:#fbfdfc
+}
+
+.monitor-stat span{
+  display:block;
+  color:var(--muted);
+  font-size:8px;
+  text-transform:uppercase;
+  font-weight:900
+}
+
+.monitor-stat strong{
+  display:block;
+  margin-top:5px;
+  font-size:18px
+}
+
+.monitor-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:760px
+}
+
+.monitor-table th,
+.monitor-table td{
+  padding:11px 13px;
+  border-bottom:1px solid var(--line);
+  text-align:left;
+  font-size:10px
+}
+
+.monitor-table th{
+  font-size:8px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.5px
+}
+
+.profile-modal .review-box{width:min(520px,100%)}
+
+.profile-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px
+}
+
+.profile-field{
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:11px;
+  background:#fbfdfc
+}
+
+.profile-field span{
+  display:block;
+  color:var(--muted);
+  font-size:8px;
+  text-transform:uppercase;
+  font-weight:850
+}
+
+.profile-field strong{
+  display:block;
+  margin-top:5px;
+  font-size:11px;
+  word-break:break-word
+}
+
+.profile-form{
+  display:grid;
+  gap:10px;
+  margin-top:14px
+}
+
+.profile-form input{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:10px;
+  background:#fff;
+  font-size:11px
+}
+
+.profile-form label{
+  font-size:9px;
+  color:var(--muted);
+  font-weight:850;
+  display:grid;
+  gap:6px
+}
+
+.profile-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:12px
+}
+
+.customer-view-btn{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--green);
+  border-radius:9px;
+  padding:8px 11px;
+  font-size:9px;
+  font-weight:900
+}
+
+.quick-money-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:14px
+}
+
+.quick-money-card{
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:13px;
+  background:#fbfdfc
+}
+
+.quick-money-card span{
+  display:block;
+  color:var(--muted);
+  font-size:8px;
+  text-transform:uppercase;
+  font-weight:950;
+  letter-spacing:.5px
+}
+
+.quick-money-card strong{
+  display:block;
+  margin-top:6px;
+  font-size:20px;
+  font-weight:950;
+  color:var(--green-dark)
+}
+
+.print-edit-grid{
+  display:grid;
+  gap:10px
+}
+
+.print-edit-row{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px;
+  background:#fbfdfc
+}
+
+.print-edit-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+  margin-bottom:9px
+}
+
+.print-edit-name{
+  font-weight:950;
+  font-size:11px
+}
+
+.print-edit-fields{
+  display:grid;
+  grid-template-columns:1.2fr .8fr .8fr;
+  gap:8px
+}
+
+.print-edit-fields label{
+  display:grid;
+  gap:5px;
+  font-size:8px;
+  color:var(--muted);
+  font-weight:900;
+  text-transform:uppercase
+}
+
+.print-edit-fields input,
+.print-edit-fields select{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:9px;
+  background:#fff;
+  font-size:10px
+}
+
+.admin-loan-input input{
+  width:100%;
+  box-sizing:border-box;
+  margin-top:7px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:11px 12px;
+  background:#fff;
+  color:var(--ink);
+  font:inherit;
+  font-weight:800;
+  outline:none
+}
+
+.admin-loan-input input:focus{
+  border-color:var(--green);
+  box-shadow:0 0 0 3px rgba(8,127,78,.1)
+}
+
+/* Mobile */
+@media(max-width:1050px){
+  .staff-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+
+  .detail-grid{
+    grid-template-columns:1fr
+  }
+}
+
+@media(max-width:760px){
+  .sidebar{
+    transform:translateX(-105%);
+    transition:.25s
+  }
+
+  .sidebar.open{transform:none}
+
+  .sidebar-scrim{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(5,25,17,.38);
+    z-index:35
+  }
+
+  .sidebar-scrim.open{display:block}
+
+  .main{
+    margin-left:0;
+    width:100%
+  }
+
+  .mobile-menu{display:grid}
+
+  .topbar{
+    padding:0 14px;
+    height:70px
+  }
+
+  .content{
+    padding:18px 14px 35px
+  }
+
+  .page-title h1{
+    font-size:24px!important;
+    font-weight:950!important;
+    letter-spacing:-.7px!important
+  }
+
+  .page-title p{
+    font-size:12px!important;
+    font-weight:700!important
+  }
+
+  .hero{
+    padding:19px;
+    align-items:flex-start;
+    flex-direction:column
+  }
+
+  .hero h2{
+    font-size:25px!important;
+    font-weight:950!important
+  }
+
+  .hero p{
+    font-size:12px!important;
+    font-weight:650!important;
+    line-height:1.55
+  }
+
+  .hero .primary{width:100%}
+
+  .stats{
+    grid-template-columns:1fr;
+    margin:14px 0
+  }
+
+  .staff-grid{
+    grid-template-columns:1fr;
+    padding:12px
+  }
+
+  .staff-name{
+    font-size:16px!important;
+    font-weight:950!important
+  }
+
+  .staff-email{
+    font-size:11px!important;
+    font-weight:650!important
+  }
+
+  .staff-hero{
+    align-items:flex-start;
+    flex-direction:column
+  }
+
+  .staff-hero .secondary{width:100%}
+
+  .card-head{
+    align-items:flex-start;
+    flex-direction:column
+  }
+
+  .card-head h3{
+    font-size:16px!important;
+    font-weight:950!important
+  }
+
+  .card-head p{
+    font-size:11px!important;
+    font-weight:650!important
+  }
+
+  .search{width:100%}
+
+  .transfer{
+    grid-template-columns:1fr
+  }
+
+  .transfer button{width:100%}
+
+  .notification-panel{
+    position:fixed;
+    left:14px;
+    right:14px;
+    top:76px;
+    width:auto;
+    max-width:none
+  }
+
+  .loan-request-top{display:block}
+
+  .passport-thumb{
+    float:none;
+    margin:0 0 8px
+  }
+
+  .tab{
+    font-size:12px!important;
+    font-weight:900!important;
+    padding:11px 14px!important
+  }
+
+  .monitor-stat span{
+    font-size:10px!important;
+    font-weight:950!important
+  }
+
+  .monitor-stat strong{
+    font-size:24px!important;
+    font-weight:950!important
+  }
+
+  .table th{
+    font-size:9px!important;
+    font-weight:950!important
+  }
+
+  .table td{
+    font-size:12px!important
+  }
+
+  .table td strong{
+    font-size:13px!important;
+    font-weight:950!important
+  }
+
+  .primary,
+  .secondary,
+  .danger{
+    font-size:11px!important;
+    font-weight:950!important
+  }
+}
+
+@media(max-width:650px){
+  .review-grid{
+    grid-template-columns:1fr
+  }
+
+  .review-passport{
+    float:none;
+    margin:0 0 14px
+  }
+
+  .review-actions{
+    flex-wrap:wrap
+  }
+
+  .monitor-summary,
+  .profile-grid,
+  .quick-money-grid,
+  .print-edit-fields{
+    grid-template-columns:1fr
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">M</div>
+    <div>
+      <strong>MIITY WALLET</strong>
+      <small>ADMINISTRATION</small>
+    </div>
+  </div>
+
+  <div class="nav-title">Workspace</div>
+
+  <nav class="nav">
+    <button class="active" id="dashboardNav">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </button>
+
+    <button id="staffNav">
+      <span class="nav-icon">♧</span>
+      Staff / Workers
+    </button>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <button class="profile-button" id="profileBtn" style="width:100%;justify-content:flex-start">
+      <div class="avatar" id="adminAvatar">A</div>
+
+      <div style="min-width:0;text-align:left">
+        <strong id="adminName">Administrator</strong>
+        <small style="display:block;color:var(--muted);font-size:9px;margin-top:2px">
+          ADMIN • PROFILE
+        </small>
+      </div>
+    </button>
+  </div>
+
+</aside>
+
+<div class="sidebar-scrim" id="scrim"></div>
+
+<main class="main">
+
+<header class="topbar">
+
+  <div style="display:flex;align-items:center;gap:10px">
+
+    <button class="mobile-menu" id="menuBtn">☰</button>
+
+    <div class="page-title">
+      <h1 id="pageHeading">Admin Dashboard</h1>
+      <p id="pageSubheading">Staff loan requests and approvals</p>
+    </div>
+
+  </div>
+
+  <div class="top-actions">
+
+    <div class="notification-menu" id="adminNotificationMenu">
+
+      <button
+        class="icon-btn notification-button"
+        id="adminNotificationButton"
+        title="Notifications"
+        aria-label="Notifications"
+      >
+        ♧
+        <span
+          id="adminNotificationBadge"
+          class="notification-badge"
+          style="display:none"
+        >0</span>
+      </button>
+
+      <div class="notification-panel" id="adminNotificationPanel">
+
+        <div class="notification-head">
+
+          <div>
+            <strong>Notifications</strong>
+            <small>Loan forms, daily print outs and worker messages</small>
+          </div>
+
+          <button
+            class="icon-btn"
+            id="adminNotificationClose"
+            style="width:32px;height:32px"
+          >×</button>
+
+        </div>
+
+        <div class="notification-list" id="adminNotificationList">
+          <div class="notification-empty">No notifications yet.</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <button class="profile-button" id="topProfileBtn" title="Admin profile">
+      <div class="avatar" id="topAdminAvatar">A</div>
+      <span>Profile</span>
+    </button>
+
+    <button class="icon-btn" id="refreshBtn" title="Refresh">↻</button>
+
+  </div>
+
+</header>
+
+<section class="content">
+
+<!-- DASHBOARD -->
+
+<div id="dashboardView" class="section-view active">
+
+  <div class="hero">
+
+    <div>
+      <div class="eyebrow">ADMINISTRATION</div>
+
+      <h2>Loan Approval Centre</h2>
+
+      <p>
+        Review every loan application submitted by staff.
+        Approve or reject only after viewing the complete application.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-top">
+        <span class="stat-label">TOTAL STAFF</span>
+        <span class="stat-icon">S</span>
+      </div>
+
+      <strong id="staffCount">0</strong>
+      <small>Registered workers</small>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span class="stat-label">TODAY'S OPERATIONS</span>
+        <span class="stat-icon">✓</span>
+      </div>
+
+      <strong id="operationCount">0</strong>
+      <small>Live paid / not paid activity</small>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span class="stat-label">PENDING FORMS</span>
+        <span class="stat-icon">F</span>
+      </div>
+
+      <strong id="formCount">0</strong>
+      <small>Forms waiting for review</small>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <div class="card-head">
+
+      <div>
+        <h3>Loan Forms Awaiting Approval</h3>
+        <p>
+          Open View to see all submitted information before approving or rejecting.
+        </p>
+      </div>
+
+      <span class="badge pending" id="loanRequestCount">0 pending</span>
+
+    </div>
+
+    <div class="loan-request-list" id="loanRequestList">
+      <div class="loading">Loading loan forms...</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- STAFF LIST -->
+
+<div id="staffView" class="section-view">
+
+  <div class="hero">
+
+    <div>
+      <div class="eyebrow">STAFF MONITORING</div>
+
+      <h2>Workers / Staff</h2>
+
+      <p>
+        Monitor each worker's live loan book, daily operations,
+        print outs, forms and messages. Administration has view-only
+        access to the loan book.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <div class="card-head">
+
+      <div>
+        <h3>Staff / Workers</h3>
+        <p>Select a worker to open their monitoring workspace.</p>
+      </div>
+
+      <input
+        class="search"
+        id="staffSearch"
+        placeholder="Search staff name or email..."
+      >
+
+    </div>
+
+    <div class="staff-grid" id="staffGrid">
+      <div class="loading">Loading staff...</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- STAFF DETAIL -->
+
+<div class="detail" id="staffDetail">
+
+  <button class="back-link" id="backToStaff">
+    ← Back to staff
+  </button>
+
+  <div class="staff-hero">
+
+    <div class="staff-identity">
+
+      <div class="big-avatar" id="detailAvatar">S</div>
+
+      <div>
+        <h2 id="detailName">Staff</h2>
+        <p id="detailEmail">—</p>
+      </div>
+
+    </div>
+
+    <button class="secondary" id="detailMessageBtn">
+      Message Worker
+    </button>
+
+  </div>
+
+  <div class="tabs">
+
+    <button class="tab active" data-tab="operations">
+      Today's Operations / Loan Book
+    </button>
+
+    <button class="tab" data-tab="customers">
+      Customers
+    </button>
+
+    <button class="tab" data-tab="printouts">
+      Submitted Print Outs
+    </button>
+
+    <button class="tab" data-tab="forms">
+      Forms
+    </button>
+
+    <button class="tab" data-tab="messages">
+      Messages
+    </button>
+
+    <button class="tab" data-tab="transfer">
+      Transfer Customer
+    </button>
+
+  </div>
+
+  <!-- OPERATIONS -->
+
+  <div id="tabOperations">
+
+    <div class="detail-grid">
+
+      <div class="card">
+
+        <div class="card-head">
+
+          <div>
+            <h3>Live Loan Book</h3>
+            <p>
+              Real-time view of this worker's loan book.
+              Administration can view it but cannot act on it.
+            </p>
+          </div>
+
+          <span class="badge read" id="opSummary">0 actions</span>
+
+        </div>
+
+        <div class="operation-list" id="operationsList"></div>
+
+      </div>
+
+      <div class="card">
+
+        <div class="card-head">
+
+          <div>
+            <h3>Quick Summary</h3>
+            <p>Current activity for this worker.</p>
+          </div>
+
+        </div>
+
+        <div class="panel-body" id="quickSummary"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- CUSTOMERS -->
+
+  <div id="tabCustomers" style="display:none">
+
+    <div class="card">
+
+      <div class="card-head">
+
+        <div>
+          <h3>Staff Customers</h3>
+          <p>All customers currently assigned to this worker.</p>
+        </div>
+
+        <input
+          class="search"
+          id="customerSearch"
+          placeholder="Search customer..."
+        >
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table class="table">
+
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="customersTable"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- PRINTOUTS -->
+
+  <div id="tabPrintouts" style="display:none">
+
+    <div class="card">
+
+      <div class="card-head">
+
+        <div>
+          <h3>Submitted Print Outs</h3>
+          <p>Daily print-out submissions made by this worker.</p>
+        </div>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table class="table">
+
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Paid</th>
+              <th>Not Paid</th>
+              <th>Total Paid</th>
+              <th>Submitted</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="printoutsTable"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FORMS -->
+
+  <div id="tabForms" style="display:none">
+
+    <div class="card">
+
+      <div class="card-head">
+
+        <div>
+          <h3>Forms</h3>
+          <p>Receive, review and approve forms submitted by this worker.</p>
+        </div>
+
+      </div>
+
+      <div class="panel-body">
+        <div class="form-list" id="formsList"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MESSAGES -->
+
+  <div id="tabMessages" style="display:none">
+
+    <div class="detail-grid">
+
+      <div class="card">
+
+        <div class="card-head">
+
+          <div>
+            <h3>Worker Messages</h3>
+            <p>Private admin ↔ worker conversation.</p>
+          </div>
+
+        </div>
+
+        <div class="operation-list" id="messagesList"></div>
+
+      </div>
+
+      <div class="card">
+
+        <div class="card-head">
+          <h3>Send Message</h3>
+        </div>
+
+        <div class="panel-body message-box">
+
+          <textarea
+            id="messageText"
+            placeholder="Write a message to this worker..."
+          ></textarea>
+
+          <button class="primary" id="sendMessageBtn">
+            Send Message
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- TRANSFER -->
+
+  <div id="tabTransfer" style="display:none">
+
+    <div class="card">
+
+      <div class="card-head">
+
+        <div>
+          <h3>Transfer Customer</h3>
+          <p>Move a customer from this worker to another staff member.</p>
+        </div>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="transfer">
+
+          <div class="field">
+            <label>CUSTOMER</label>
+
+            <select id="transferCustomer">
+              <option value="">Select customer...</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>TRANSFER TO</label>
+
+            <select id="transferWorker">
+              <option value="">Select staff...</option>
+            </select>
+          </div>
+
+          <button class="primary" id="transferBtn">
+            Transfer Customer
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</section>
+
+</main>
+</div>
+
+<!-- LOAN REVIEW MODAL -->
+
+<div
+  class="review-modal"
+  id="loanReviewModal"
+  onclick="if(event.target===this)closeLoanReview()"
+>
+
+  <div class="review-box" role="dialog" aria-modal="true">
+
+    <div class="review-head">
+
+      <div>
+        <small>LOAN APPLICATION REVIEW</small>
+        <h2 id="loanReviewTitle">Loan Application</h2>
+      </div>
+
+      <button
+        class="icon-btn"
+        type="button"
+        onclick="closeLoanReview()"
+      >×</button>
+
+    </div>
+
+    <div class="review-body" id="loanReviewBody"></div>
+
+    <div class="review-actions" id="loanReviewActions"></div>
+
+  </div>
+
+</div>
+
+<!-- PRINTOUT REVIEW MODAL -->
+
+<div
+  class="review-modal"
+  id="printoutReviewModal"
+  onclick="if(event.target===this)closePrintoutReview()"
+>
+
+  <div class="review-box" role="dialog" aria-modal="true">
+
+    <div class="review-head">
+
+      <div>
+        <small>DAILY PRINT OUT</small>
+        <h2 id="printoutReviewTitle">Print Out</h2>
+      </div>
+
+      <button
+        class="icon-btn"
+        type="button"
+        onclick="closePrintoutReview()"
+      >×</button>
+
+    </div>
+
+    <div class="review-body" id="printoutReviewBody"></div>
+
+    <div class="review-actions">
+
+      <button
+        class="secondary"
+        type="button"
+        onclick="closePrintoutReview()"
+      >
+        Close
+      </button>
+
+      <button
+        class="secondary"
+        type="button"
+        id="printoutEditModeBtn"
+        style="display:none"
+      >
+        Edit Print Out
+      </button>
+
+      <button
+        class="primary"
+        type="button"
+        id="savePrintoutEditBtn"
+        style="display:none"
+      >
+        Save Changes
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- CUSTOMER MODAL -->
+
+<div
+  class="review-modal"
+  id="customerReviewModal"
+  onclick="if(event.target===this)closeCustomerReview()"
+>
+
+  <div class="review-box" role="dialog" aria-modal="true">
+
+    <div class="review-head">
+
+      <div>
+        <small>CUSTOMER PROFILE</small>
+        <h2 id="customerReviewTitle">Customer</h2>
+      </div>
+
+      <button
+        class="icon-btn"
+        type="button"
+        onclick="closeCustomerReview()"
+      >×</button>
+
+    </div>
+
+    <div class="review-body" id="customerReviewBody"></div>
+
+    <div class="review-actions">
+
+      <button
+        class="secondary"
+        type="button"
+        onclick="closeCustomerReview()"
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- PROFILE MODAL -->
+
+<div
+  class="review-modal profile-modal"
+  id="profileModal"
+  onclick="if(event.target===this)closeProfile()"
+>
+
+  <div class="review-box" role="dialog" aria-modal="true">
+
+    <div class="review-head">
+
+      <div>
+        <small>ADMIN PROFILE</small>
+        <h2>Administrator Profile</h2>
+      </div>
+
+      <button
+        class="icon-btn"
+        type="button"
+        onclick="closeProfile()"
+      >×</button>
+
+    </div>
+
+    <div class="review-body">
+
+      <div class="profile-grid">
+
+        <div class="profile-field">
+          <span>Username</span>
+          <strong id="profileUsername">—</strong>
+        </div>
+
+        <div class="profile-field">
+          <span>Gmail / Email</span>
+          <strong id="profileEmail">—</strong>
+        </div>
+
+      </div>
+
+      <form class="profile-form" id="profileForm">
+
+        <label>
+          USERNAME
+          <input
+            id="profileUsernameInput"
+            required
+            maxlength="40"
+          >
+        </label>
+
+        <button class="primary" type="submit">
+          Save Username
+        </button>
+
+      </form>
+
+      <div class="profile-form">
+
+        <label>
+          NEW PASSWORD
+          <input
+            id="newAdminPassword"
+            type="password"
+            minlength="6"
+            placeholder="At least 6 characters"
+          >
+        </label>
+
+        <label>
+          CURRENT PASSWORD
+          <input
+            id="currentAdminPassword"
+            type="password"
+            placeholder="Required to change password"
+          >
+        </label>
+
+        <button
+          class="secondary"
+          id="changeAdminPasswordBtn"
+          type="button"
+        >
+          Change Password
+        </button>
+
+      </div>
+
+      <div
+        class="profile-actions"
+        style="justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"
+      >
+
+        <button
+          class="danger"
+          type="button"
+          id="adminLogoutBtn"
+        >
+          Log Out
+        </button>
+
+        <button
+          class="secondary"
+          type="button"
+          onclick="closeProfile()"
+        >
+          Close
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+
+/* =========================================================
+   FIREBASE IMPORTS
+   ========================================================= */
+
+import {
+  initializeApp,
+  getApps,
+  getApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+  setPersistence,
+  browserSessionPersistence,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  getDoc,
+  updateDoc,
+  setDoc,
+  addDoc,
+  deleteDoc,
+  serverTimestamp,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+/* =========================================================
+   FIREBASE CONFIG
+   ========================================================= */
+
+const cfg = {
+  apiKey:"AIzaSyBbt239K7C1xnYG24rJpX4BIvt5IrmzxL8",
+  authDomain:"worker-wallet.firebaseapp.com",
+  projectId:"worker-wallet",
+  storageBucket:"worker-wallet.firebasestorage.app",
+  messagingSenderId:"136894935089",
+  appId:"1:136894935089:web:573764933dd07437eea510",
+  measurementId:"G-ESDSP8QM2G"
+};
+
+const app =
+  getApps().length
+    ? getApp()
+    : initializeApp(cfg);
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+const $ = id => document.getElementById(id);
+
+const money = n =>
+  "₦" + Number(n || 0).toLocaleString("en-NG");
+
+const esc = v =>
+  String(v ?? "").replace(
+    /[&<>"']/g,
+    x => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[x])
+  );
+
+const initials = n =>
+  String(n || "A")
+    .trim()
+    .split(/\s+/)
+    .map(x => x[0])
+    .slice(0,2)
+    .join("")
+    .toUpperCase() || "A";
+
+const today = () =>
+  new Date().toISOString().slice(0,10);
+
+const toast = m => {
+  const t = $("toast");
+
+  if(!t) return;
+
+  t.textContent = m;
+  t.classList.add("show");
+
+  clearTimeout(window.tt);
+
+  window.tt = setTimeout(
+    () => t.classList.remove("show"),
+    2600
+  );
+};
+
+const notificationDate = v => {
+  try{
+    return v?.toDate
+      ? v.toDate().toLocaleString("en-NG")
+      : v
+        ? new Date(v).toLocaleString("en-NG")
+        : "";
+  }catch(e){
+    return "";
+  }
+};
+
+const dt = v => {
+  try{
+    return v?.toDate
+      ? v.toDate().toLocaleString("en-NG")
+      : v
+        ? new Date(v).toLocaleString("en-NG")
+        : "—";
+  }catch(e){
+    return "—";
+  }
+};
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let admin = null;
+let staff = [];
+let selected = null;
+
+let customers = [];
+let staffCustomerProfiles = [];
+let operations = [];
+let printouts = [];
+let forms = [];
+let messages = [];
+let loanRequests = [];
+let adminNotifications = [];
+
+let adminNotifUnsub = null;
+let loanFormsUnsub = null;
+let loanNotifUnsub = null;
+let printoutNotifUnsub = null;
+let liveLoanBookUnsub = null;
+let liveOperationsUnsub = null;
+
+
+/* =========================================================
+   MOBILE MENU
+   ========================================================= */
+
+$("menuBtn").onclick = () => {
+  $("sidebar").classList.add("open");
+  $("scrim").classList.add("open");
+};
+
+$("scrim").onclick = () => {
+  $("sidebar").classList.remove("open");
+  $("scrim").classList.remove("open");
+};
+
+function closeMenu(){
+  $("sidebar").classList.remove("open");
+  $("scrim").classList.remove("open");
+}
+
+
+/* =========================================================
+   MAIN NAVIGATION
+   ========================================================= */
+
+function dashboard(){
+
+  if(liveLoanBookUnsub) liveLoanBookUnsub();
+  if(liveOperationsUnsub) liveOperationsUnsub();
+
+  $("dashboardView").classList.add("active");
+  $("staffView").classList.remove("active");
+  $("staffDetail").classList.remove("active");
+
+  $("dashboardNav").classList.add("active");
+  $("staffNav").classList.remove("active");
+
+  $("pageHeading").textContent = "Loan Approval Centre";
+  $("pageSubheading").textContent = "Staff loan requests and approvals";
+
+  closeMenu();
+}
+
+function showStaffList(){
+
+  if(liveLoanBookUnsub) liveLoanBookUnsub();
+  if(liveOperationsUnsub) liveOperationsUnsub();
+
+  $("dashboardView").classList.remove("active");
+  $("staffView").classList.add("active");
+  $("staffDetail").classList.remove("active");
+
+  $("dashboardNav").classList.remove("active");
+  $("staffNav").classList.add("active");
+
+  $("pageHeading").textContent = "Staff / Workers";
+  $("pageSubheading").textContent = "Live worker monitoring";
+
+  closeMenu();
+
+  loadStaff().catch(e => {
+    console.error(e);
+    toast("Could not load staff accounts");
+  });
+}
+
+$("dashboardNav").onclick = dashboard;
+$("staffNav").onclick = showStaffList;
+
+$("backToStaff").onclick = () => {
+
+  if(liveLoanBookUnsub) liveLoanBookUnsub();
+  if(liveOperationsUnsub) liveOperationsUnsub();
+
+  showStaffList();
+};
+
+$("refreshBtn").onclick = loadAll;
+
+
+/* =========================================================
+   STAFF DETAIL
+   ========================================================= */
+
+function detail(w){
+
+  if(!w) return;
+
+  selected = w;
+
+  $("dashboardView").classList.remove("active");
+  $("staffView").classList.remove("active");
+  $("staffDetail").classList.add("active");
+
+  $("staffNav").classList.add("active");
+  $("dashboardNav").classList.remove("active");
+
+  $("pageHeading").textContent =
+    w.name || w.username || "Staff";
+
+  $("pageSubheading").textContent =
+    "Staff workspace";
+
+  $("detailName").textContent =
+    w.name || w.username || "Staff";
+
+  $("detailEmail").textContent =
+    w.email || "No email";
+
+  $("detailAvatar").textContent =
+    initials(w.name || w.username);
+
+  $("transferWorker").innerHTML =
+    '<option value="">Select staff...</option>' +
+    staff
+      .filter(x => x.uid !== w.uid)
+      .map(x =>
+        `<option value="${esc(x.uid)}">
+          ${esc(x.name || x.username || x.email || "Staff")}
+        </option>`
+      )
+      .join("");
+
+  loadStaffData();
+  startLiveLoanBook(w.uid);
+}
+
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+function tab(n){
+
+  document
+    .querySelectorAll("[id^=tab]")
+    .forEach(x => x.style.display = "none");
+
+  const target =
+    $("tab" + n[0].toUpperCase() + n.slice(1));
+
+  if(target) target.style.display = "block";
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(x =>
+      x.classList.toggle(
+        "active",
+        x.dataset.tab === n
+      )
+    );
+
+  if(n === "customers") renderCustomers();
+  if(n === "messages") renderMessages();
+  if(n === "transfer") renderTransfer();
+}
+
+document
+  .querySelectorAll(".tab")
+  .forEach(x =>
+    x.onclick = () => tab(x.dataset.tab)
+  );
+
+$("detailMessageBtn").onclick =
+  () => tab("messages");
+
+
+/* =========================================================
+   STAFF RENDER
+   ========================================================= */
+
+function renderStaff(list = staff){
+
+  const g = $("staffGrid");
+
+  if(!g) return;
+
+  if(!list.length){
+
+    g.innerHTML =
+      '<div class="empty" style="grid-column:1/-1">' +
+      'No staff accounts found.' +
+      '</div>';
+
+    return;
+  }
+
+  g.innerHTML = list.map(w => `
+
+    <div class="staff-card" data-id="${esc(w.uid)}">
+
+      <div class="staff-top">
+
+        <div class="staff-avatar">
+          ${esc(initials(w.name || w.username || w.email))}
+        </div>
+
+        <div style="min-width:0">
+
+          <div class="staff-name">
+            ${esc(w.name || w.username || "Staff")}
+          </div>
+
+          <div class="staff-email">
+            ${esc(w.email || "No email")}
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="staff-meta">
+
+        <div class="mini">
+          <span>Customers</span>
+          <strong>${w.customerCount ?? "—"}</strong>
+        </div>
+
+        <div class="mini">
+          <span>Status</span>
+          <strong>${esc(w.status || "Active")}</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+  `).join("");
+
+  g.querySelectorAll(".staff-card")
+    .forEach(c => {
+
+      c.onclick = () => {
+
+        const worker =
+          staff.find(x => x.uid === c.dataset.id);
+
+        if(worker) detail(worker);
+      };
+
+    });
+}
+
+$("staffSearch").oninput = e => {
+
+  const q =
+    e.target.value.toLowerCase().trim();
+
+  renderStaff(
+    staff.filter(w =>
+      `${w.name || ""} ${w.username || ""} ${w.email || ""}`
+        .toLowerCase()
+        .includes(q)
+    )
+  );
+};
+
+
+/* =========================================================
+   ADMIN NOTIFICATIONS
+   ========================================================= */
+
+function renderAdminNotifications(){
+
+  const box = $("adminNotificationList");
+  const badge = $("adminNotificationBadge");
+
+  if(!box) return;
+
+  const list =
+    adminNotifications
+      .slice()
+      .sort(
+        (a,b) =>
+          (b.createdAt?.toDate?.()?.getTime?.() || 0) -
+          (a.createdAt?.toDate?.()?.getTime?.() || 0)
+      );
+
+  const unread =
+    list.filter(x => x.read !== true);
+
+  if(badge){
+
+    badge.textContent =
+      unread.length > 99
+        ? "99+"
+        : String(unread.length);
+
+    badge.style.display =
+      unread.length ? "flex" : "none";
+  }
+
+  box.innerHTML = list.length
+
+    ? list.slice(0,40).map(n => `
+
+      <div
+        class="notification-item"
+        data-notification-id="${esc(n.id)}"
+        data-notification-type="${esc(n.type || "")}"
+        data-reference-id="${esc(n.referenceId || "")}"
+        data-worker-id="${esc(n.workerId || "")}"
+      >
+
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            gap:8px;
+            align-items:flex-start
+          "
+        >
+
+          <div style="min-width:0">
+
+            <strong>
+              ${esc(n.title || "Worker update")}
+            </strong>
+
+            <p>
+              ${esc(n.message || "New activity from a worker.")}
+            </p>
+
+            <small>
+              ${notificationDate(n.createdAt)}
+            </small>
+
+          </div>
+
+          <button
+            class="notification-cancel"
+            type="button"
+            data-notification-cancel="${esc(n.id)}"
+            title="Cancel notification"
+            aria-label="Cancel notification"
+          >
+            ×
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("")
+
+    : '<div class="notification-empty">No worker notifications yet.</div>';
+}
+
+
+function startAdminNotifications(){
+
+  if(adminNotifUnsub) adminNotifUnsub();
+  if(printoutNotifUnsub) printoutNotifUnsub();
+  if(loanNotifUnsub) loanNotifUnsub();
+
+  let storedNotifications = [];
+  let submittedPrintouts = [];
+  let submittedLoans = [];
+
+  const rebuild = () => {
+
+    const derivedPrintouts =
+      submittedPrintouts.map(p => ({
+        id:`derived-printout-${p.id}`,
+        type:"printout",
+        referenceId:p.id,
+        workerId:p.workerId || p.accountId || "",
+        title:"New Print Out Submitted",
+        message:
+          `${p.workerName || "A worker"} submitted a daily print out for ${p.date || p.dateKey || "today"}.`,
+        createdAt:p.createdAt || p.submittedAt || null,
+        read:
+          localStorage.getItem(
+            `mw_admin_seen_printout_${p.id}`
+          ) === "1"
+      }));
+
+    const derivedLoans =
+      submittedLoans
+        .filter(
+          x =>
+            String(x.status || "pending").toLowerCase() ===
+            "pending"
+        )
+        .map(f => ({
+          id:`derived-loan-${f.id}`,
+          type:"loan_application",
+          referenceId:f.id,
+          workerId:f.workerId || f.accountId || "",
+          title:"New Loan Application",
+          message:
+            `${f.workerName || "A worker"} submitted a loan application for ${f.name || "a customer"}.`,
+          createdAt:f.createdAt || f.submittedAt || null,
+          read:
+            localStorage.getItem(
+              `mw_admin_seen_loan_${f.id}`
+            ) === "1"
+        }));
+
+    const map = new Map();
+
+    [
+      ...storedNotifications,
+      ...derivedPrintouts,
+      ...derivedLoans
+    ].forEach(n => {
+
+      map.set(
+        `${n.type || ""}_${n.referenceId || n.id}`,
+        n
+      );
+
+    });
+
+    adminNotifications =
+      Array.from(map.values()).filter(n => {
+
+        if(!String(n.id || "").startsWith("derived-")){
+          return true;
+        }
+
+        const key =
+          `mw_admin_cancelled_${n.type || "notification"}_${n.referenceId || n.id}`;
+
+        return localStorage.getItem(key) !== "1";
+      });
+
+    renderAdminNotifications();
+  };
+
+
+  adminNotifUnsub =
+    onSnapshot(
+      collection(db,"adminNotifications"),
+      snap => {
+
+        storedNotifications =
+          snap.docs.map(d => ({
+            id:d.id,
+            ...d.data()
+          }));
+
+        rebuild();
+
+      },
+      e =>
+        console.warn(
+          "Admin notification listener failed:",
+          e
+        )
+    );
+
+
+  const loanQuery =
+    query(
+      collection(db,"workerForms"),
+      where("formType","==","loan_application")
+    );
+
+  const loanUnsub =
+    onSnapshot(
+      loanQuery,
+      snap => {
+
+        submittedLoans =
+          snap.docs.map(d => ({
+            id:d.id,
+            ...d.data()
+          }));
+
+        rebuild();
+
+      },
+      e =>
+        console.warn(
+          "Loan notification watcher failed:",
+          e
+        )
+    );
+
+
+  printoutNotifUnsub =
+    onSnapshot(
+      collection(db,"workerPrintouts"),
+      snap => {
+
+        submittedPrintouts =
+          snap.docs.map(d => ({
+            id:d.id,
+            ...d.data()
+          }));
+
+        rebuild();
+
+      },
+      e =>
+        console.warn(
+          "Printout notification watcher failed:",
+          e
+        )
+    );
+
+
+  loanNotifUnsub = loanUnsub;
+}
+
+
+function openNotification(n){
+
+  const derived =
+    String(n.id || "").startsWith("derived-");
+
+  if(derived){
+
+    try{
+
+      localStorage.setItem(
+        `mw_admin_seen_${n.type === "printout" ? "printout" : "loan"}_${n.referenceId}`,
+        "1"
+      );
+
+    }catch(e){}
+
+  }else{
+
+    if(n.read !== true){
+
+      updateDoc(
+        doc(db,"adminNotifications",n.id),
+        {
+          read:true,
+          readAt:serverTimestamp()
+        }
+      ).catch(() => {});
+
+    }
+
+  }
+
+  if(n.workerId){
+
+    const w =
+      staff.find(x => x.uid === n.workerId);
+
+    if(w) detail(w);
+  }
+
+  if(n.type === "loan_application" && n.referenceId){
+
+    setTimeout(
+      () => openLoanReview(n.referenceId),
+      100
+    );
+
+  }else if(n.type === "printout"){
+
+    setTimeout(
+      () => {
+        if(selected) tab("printouts");
+      },
+      100
+    );
+
+  }else if(n.type === "message"){
+
+    setTimeout(
+      () => {
+        if(selected) tab("messages");
+      },
+      100
+    );
+  }
+
+  $("adminNotificationPanel")
+    .classList.remove("open");
+}
+
+
+$("adminNotificationButton").onclick = () => {
+
+  $("adminNotificationPanel")
+    .classList.toggle("open");
+
+};
+
+$("adminNotificationClose").onclick = () => {
+
+  $("adminNotificationPanel")
+    .classList.remove("open");
+
+};
+
+
+$("adminNotificationList").onclick = async e => {
+
+  const cancel =
+    e.target.closest("[data-notification-cancel]");
+
+  if(cancel){
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const id =
+      cancel.dataset.notificationCancel;
+
+    const n =
+      adminNotifications.find(
+        x => String(x.id) === String(id)
+      );
+
+    try{
+
+      if(
+        n &&
+        String(n.id).startsWith("derived-")
+      ){
+
+        const key =
+          `mw_admin_cancelled_${n.type || "notification"}_${n.referenceId || n.id}`;
+
+        localStorage.setItem(key,"1");
+
+        adminNotifications =
+          adminNotifications.filter(
+            x => String(x.id) !== String(id)
+          );
+
+        renderAdminNotifications();
+
+        toast("Notification cancelled");
+
+      }else{
+
+        await deleteDoc(
+          doc(db,"adminNotifications",id)
+        );
+
+        toast("Notification cancelled");
+      }
+
+    }catch(err){
+
+      console.warn(err);
+      toast("Notification could not be cancelled");
+
+    }
+
+    return;
+  }
+
+  const item =
+    e.target.closest(".notification-item");
+
+  if(!item) return;
+
+  const n =
+    adminNotifications.find(
+      x => x.id === item.dataset.notificationId
+    );
+
+  if(n) openNotification(n);
+};
+
+
+document.addEventListener("click",e => {
+
+  if(!e.target.closest("#adminNotificationMenu")){
+
+    $("adminNotificationPanel")
+      ?.classList.remove("open");
+
+  }
+
+});
+
+
+/* =========================================================
+   LOAN REQUESTS
+   ========================================================= */
+
+function renderLoanRequests(){
+
+  const box = $("loanRequestList");
+  const count = $("loanRequestCount");
+
+  if(!box) return;
+
+  const pending =
+    loanRequests
+      .filter(
+        x =>
+          String(x.status || "pending").toLowerCase() ===
+          "pending"
+      )
+      .sort(
+        (a,b) =>
+          (b.createdAt?.toDate?.()?.getTime?.() || 0) -
+          (a.createdAt?.toDate?.()?.getTime?.() || 0)
+      );
+
+  if(count){
+    count.textContent =
+      `${pending.length} pending`;
+  }
+
+  box.innerHTML =
+    pending.length
+
+      ? pending.map(a => `
+
+        <div class="loan-request">
+
+          <div class="loan-request-top">
+
+            <div>
+
+              ${
+                a.passport
+                  ? `
+                    <img
+                      class="passport-thumb"
+                      src="${esc(a.passport)}"
+                      alt="Passport"
+                    >
+                  `
+                  : ""
+              }
+
+              <strong>
+                ${esc(a.name || "Customer")}
+              </strong>
+
+              <p>
+                ${esc(a.workerName || "Worker")}
+                submitted a loan form for
+                ${esc(a.phone || "—")}.
+              </p>
+
+              <div class="loan-request-meta">
+
+                <span>
+                  Amount:
+                  ${
+                    Number(a.amount || 0) > 0
+                      ? money(a.amount)
+                      : "Awaiting admin"
+                  }
+                </span>
+
+                <span>
+                  Installment:
+                  ${
+                    Number(a.dailyPayment || 0) > 0
+                      ? money(a.dailyPayment)
+                      : "Awaiting admin"
+                  }
+                </span>
+
+                <span>
+                  ${esc(
+                    notificationDate(a.createdAt) ||
+                    "Recently"
+                  )}
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="loan-request-actions">
+
+            <button
+              class="view-loan"
+              data-loan-view="${esc(a.id)}"
+            >
+              View
+            </button>
+
+            <button
+              class="approve-loan"
+              data-loan-approve="${esc(a.id)}"
+            >
+              Approve & Start Loan
+            </button>
+
+            <button
+              class="reject-loan"
+              data-loan-reject="${esc(a.id)}"
+            >
+              Reject
+            </button>
+
+          </div>
+
+        </div>
+
+      `).join("")
+
+      : `
+        <div class="empty">
+          No loan forms are waiting for approval.
+        </div>
+      `;
+}
+
+
+function closeLoanReview(){
+
+  $("loanReviewModal")
+    ?.classList.remove("open");
+
+}
+
+
+function openLoanReview(id){
+
+  const a =
+    loanRequests.find(x => x.id === id);
+
+  if(!a) return;
+
+  $("loanReviewTitle").textContent =
+    `Loan Application — ${a.name || "Customer"}`;
+
+  const pending =
+    String(a.status || "pending").toLowerCase() ===
+    "pending";
+
+  const fields = [
+    ["Customer Full Name",a.name],
+    ["Phone Number",a.phone],
+    ["Guarantor Full Name",a.guarantorName],
+    ["Guarantor Phone",a.guarantorPhone],
+    ["Worker / Staff",a.workerName],
+    [
+      "Application Status",
+      String(a.status || "pending").toUpperCase()
+    ],
+    [
+      "Submitted",
+      notificationDate(a.createdAt || a.submittedAt)
+    ]
+  ];
+
+  let html = `
+
+    ${
+      a.passport
+        ? `
+          <img
+            class="review-passport"
+            src="${esc(a.passport)}"
+            alt="Passport Photo"
+          >
+        `
+        : ""
+    }
+
+    <div class="review-grid">
+
+      ${fields.map(
+        ([k,v]) => `
+          <div class="review-field">
+            <span>${esc(k)}</span>
+            <strong>${esc(v ?? "—")}</strong>
+          </div>
+        `
+      ).join("")}
+
+  `;
+
+
+  if(pending){
+
+    html += `
+
+      <div class="review-field admin-loan-input">
+
+        <span>Amount Borrowed (₦)</span>
+
+        <input
+          id="adminLoanAmount"
+          inputmode="numeric"
+          value="${
+            Number(a.amount || 0)
+              ? Number(a.amount).toLocaleString("en-NG")
+              : ""
+          }"
+          placeholder="Enter amount borrowed"
+        >
+
+      </div>
+
+
+      <div class="review-field admin-loan-input">
+
+        <span>
+          Amount Repaying / Total Repayment (₦)
+        </span>
+
+        <input
+          id="adminLoanTotal"
+          inputmode="numeric"
+          value="${
+            Number(a.totalRepayment || 0)
+              ? Number(a.totalRepayment).toLocaleString("en-NG")
+              : ""
+          }"
+          placeholder="Enter total amount to be repaid"
+        >
+
+      </div>
+
+
+      <div class="review-field">
+
+        <span>Daily Installment (30 Days)</span>
+
+        <strong id="adminLoanDailyDisplay">
+
+          ${
+            Number(a.totalRepayment || 0) > 0
+              ? `₦${(
+                  Number(a.totalRepayment) / 30
+                ).toLocaleString(
+                  "en-NG",
+                  {
+                    minimumFractionDigits:2,
+                    maximumFractionDigits:2
+                  }
+                )} per day × 30 days`
+              : "₦0 per day × 30 days"
+          }
+
+        </strong>
+
+      </div>
+
+    `;
+
+  }else{
+
+    html += `
+
+      <div class="review-field">
+        <span>Amount Borrowed</span>
+        <strong>${money(a.amount || 0)}</strong>
+      </div>
+
+      <div class="review-field">
+        <span>Daily Installment</span>
+        <strong>${money(a.dailyPayment || 0)}</strong>
+      </div>
+
+      <div class="review-field">
+        <span>Total Repayment</span>
+        <strong>
+          ${money(
+            a.totalRepayment ||
+            Number(a.dailyPayment || 0) * 30
+          )}
+        </strong>
+      </div>
+
+    `;
+  }
+
+
+  html += `
+
+    </div>
+
+    <div
+      style="
+        margin-top:12px;
+        border:1px solid var(--line);
+        border-radius:11px;
+        padding:10px;
+        background:#fbfdfc
+      "
+    >
+
+      <span
+        style="
+          display:block;
+          color:var(--muted);
+          font-size:8px;
+          text-transform:uppercase;
+          font-weight:850
+        "
+      >
+        Application Reference
+      </span>
+
+      <strong
+        style="
+          display:block;
+          margin-top:5px;
+          font-size:10px;
+          word-break:break-all
+        "
+      >
+        ${esc(a.id)}
+      </strong>
+
+    </div>
+
+  `;
+
+  $("loanReviewBody").innerHTML = html;
+
+
+  if(pending){
+
+    const amt = $("adminLoanAmount");
+    const total = $("adminLoanTotal");
+    const dailyDisplay = $("adminLoanDailyDisplay");
+
+    const fmt = el => {
+
+      if(!el) return;
+
+      const digits =
+        String(el.value || "")
+          .replace(/[^0-9]/g,"");
+
+      el.value =
+        digits
+          ? Number(digits).toLocaleString("en-NG")
+          : "";
+    };
+
+    const updateDaily = () => {
+
+      const t =
+        Number(
+          String(total?.value || "")
+            .replace(/,/g,"")
+        ) || 0;
+
+      const daily = t / 30;
+
+      if(dailyDisplay){
+
+        dailyDisplay.textContent =
+          t > 0
+
+            ? `₦${daily.toLocaleString(
+                "en-NG",
+                {
+                  minimumFractionDigits:2,
+                  maximumFractionDigits:2
+                }
+              )} per day × 30 days`
+
+            : "₦0 per day × 30 days";
+      }
+    };
+
+    [amt,total].forEach(el => {
+
+      el?.addEventListener(
+        "input",
+        () => {
+          fmt(el);
+          updateDaily();
+        }
+      );
+
+    });
+
+  }
+
+
+  $("loanReviewActions").innerHTML =
+    pending
+
+      ? `
+        <button
+          class="danger"
+          type="button"
+          data-review-reject="${esc(a.id)}"
+        >
+          Reject
+        </button>
+
+        <button
+          class="primary"
+          type="button"
+          data-review-approve="${esc(a.id)}"
+        >
+          Approve & Start Loan
+        </button>
+      `
+
+      : `
+        <span
+          class="badge ${
+            a.status === "approved"
+              ? "approved"
+              : "notpaid"
+          }"
+        >
+          ${esc(String(a.status || "").toUpperCase())}
+        </span>
+      `;
+
+  $("loanReviewModal")
+    .classList.add("open");
+}
+
+
+/* =========================================================
+   LOAN REVIEW ACTIONS
+   ========================================================= */
+
+$("loanReviewActions").onclick = async e => {
+
+  const approve =
+    e.target.closest("[data-review-approve]");
+
+  const reject =
+    e.target.closest("[data-review-reject]");
+
+  if(approve){
+
+    e.preventDefault();
+
+    await reviewLoanRequest(
+      approve.dataset.reviewApprove,
+      "approved"
+    );
+  }
+
+  if(reject){
+
+    e.preventDefault();
+
+    await reviewLoanRequest(
+      reject.dataset.reviewReject,
+      "rejected"
+    );
+  }
+};
+
+
+/* =========================================================
+   PRINTOUT REVIEW
+   ========================================================= */
+
+function closePrintoutReview(){
+
+  $("printoutReviewModal")
+    ?.classList.remove("open");
+
+}
+
+let editingPrintoutId = null;
+
+
+function openPrintoutEdit(id){
+
+  const p =
+    printouts.find(x => x.id === id);
+
+  if(!p) return;
+
+  editingPrintoutId = id;
+
+  const saveBtn =
+    $("savePrintoutEditBtn");
+
+  if(saveBtn){
+
+    saveBtn.style.display = "inline-flex";
+    saveBtn.textContent = "Save Changes";
+    saveBtn.disabled = false;
+  }
+
+  $("printoutReviewTitle").textContent =
+    `Daily Print Out — ${p.date || p.dateKey || "Submission"}`;
+
+  const rows =
+    (Array.isArray(p.records) ? p.records : [])
+      .filter(
+        r =>
+          String(r.status || "").toLowerCase() !==
+          "firstday"
+      );
+
+  const workerCustomers =
+    customers
+      .map(x => x.borrower || x)
+      .filter(Boolean);
+
+  const options =
+    workerCustomers
+      .map(
+        b =>
+          `<option value="${esc(b.id || "")}">
+            ${esc(b.name || "Customer")} — ${esc(b.phone || "")}
+          </option>`
+      )
+      .join("");
+
+
+  $("printoutReviewBody").innerHTML = `
+
+    <div class="review-grid">
+
+      <div class="review-field">
+        <span>Worker</span>
+        <strong>
+          ${esc(
+            p.workerName ||
+            selected?.name ||
+            "Worker"
+          )}
+        </strong>
+      </div>
+
+      <div class="review-field">
+        <span>Submitted</span>
+        <strong>${esc(dt(p.createdAt))}</strong>
+      </div>
+
+      <div class="review-field">
+        <span>Paid Records</span>
+        <strong>${p.paidCount || 0}</strong>
+      </div>
+
+      <div class="review-field">
+        <span>Not Paid Records</span>
+        <strong>${p.notPaidCount || 0}</strong>
+      </div>
+
+      <div class="review-field">
+        <span>Total Paid</span>
+        <strong>${money(p.totalPaid)}</strong>
+      </div>
+
+      <div class="review-field">
+        <span>Date Key</span>
+        <strong>${esc(p.dateKey || "—")}</strong>
+      </div>
+
+    </div>
+
+    <div style="margin-top:14px">
+
+      <h3 style="font-size:12px;margin:0 0 8px">
+        Edit Records
+      </h3>
+
+      <p
+        style="
+          font-size:10px;
+          color:var(--muted);
+          margin:0 0 10px
+        "
+      >
+        Correct the customer, status or paid amount.
+        Saving corrections also updates the worker's live dashboard.
+      </p>
+
+      <div class="print-edit-grid">
+
+        ${
+          rows.length
+
+            ? rows.map((r,i) => {
+
+                const current =
+                  workerCustomers.find(
+                    b =>
+                      String(b.id) ===
+                        String(r.borrowerId) ||
+                      String(b.phone || "")
+                        .replace(/\D/g,"") ===
+                        String(r.phone || "")
+                          .replace(/\D/g,"")
+                  );
+
+                return `
+
+                  <div class="print-edit-row">
+
+                    <div class="print-edit-top">
+
+                      <span class="print-edit-name">
+                        Record ${i + 1}
+                      </span>
+
+                      <span
+                        class="badge ${
+                          r.status === "paid"
+                            ? "paid"
+                            : r.status === "firstday"
+                              ? "read"
+                              : "notpaid"
+                        }"
+                      >
+                        ${esc(
+                          String(
+                            r.status || "notpaid"
+                          ).toUpperCase()
+                        )}
+                      </span>
+
+                    </div>
+
+                    <div class="print-edit-fields">
+
+                      <label>
+                        Customer
+
+                        <select
+                          data-edit-customer="${i}"
+                        >
+                          ${options}
+                        </select>
+
+                      </label>
+
+                      <label>
+                        Status
+
+                        <select
+                          data-edit-status="${i}"
+                        >
+                          <option value="paid">
+                            PAID
+                          </option>
+
+                          <option value="notpaid">
+                            NOT PAID
+                          </option>
+                        </select>
+
+                      </label>
+
+                      <label>
+                        Paid Amount
+
+                        <input
+                          data-edit-amount="${i}"
+                          inputmode="numeric"
+                          value="${esc(
+                            Number(
+                              r.paidToday || 0
+                            ).toLocaleString("en-NG")
+                          )}"
+                        >
+
+                      </label>
+
+                    </div>
+
+                  </div>
+
+                `;
+
+              }).join("")
+
+            : `
+              <div class="empty">
+                No records in this print out.
+              </div>
+            `
+        }
+
+      </div>
+
+    </div>
+  `;
+
+
+  rows.forEach((r,i) => {
+
+    const sel =
+      document.querySelector(
+        `[data-edit-customer="${i}"]`
+      );
+
+    const current =
+      workerCustomers.find(
+        b =>
+          String(b.id) ===
+            String(r.borrowerId) ||
+          String(b.phone || "")
+            .replace(/\D/g,"") ===
+            String(r.phone || "")
+              .replace(/\D/g,"")
+      );
+
+    if(sel && current){
+      sel.value = current.id;
+    }
+
+    const st =
+      document.querySelector(
+        `[data-edit-status="${i}"]`
+      );
+
+    if(st){
+
+      st.value =
+        String(r.status || "notpaid") === "paid"
+          ? "paid"
+          : "notpaid";
+    }
+
+    const amt =
+      document.querySelector(
+        `[data-edit-amount="${i}"]`
+      );
+
+    if(amt){
+
+      amt.addEventListener(
+        "input",
+        () => {
+
+          const digits =
+            amt.value.replace(
+              /[^0-9]/g,
+              ""
+            );
+
+          amt.value =
+            digits
+              ? Number(digits).toLocaleString("en-NG")
+              : "";
+        }
+      );
+    }
+
+  });
+
+  $("printoutReviewModal")
+    .classList.add("open");
+}
+
+
+function openPrintoutReview(id){
+
+  const p =
+    printouts.find(x => x.id === id);
+
+  if(!p) return;
+
+  editingPrintoutId = null;
+
+  $("printoutReviewTitle").textContent =
+    `Daily Print Out — ${p.date || p.dateKey || "Submission"}`;
+
+  const rows =
+    (Array.isArray(p.records) ? p.records : [])
+      .filter(
+        r =>
+          String(r.status || "").toLowerCase() !==
+          "firstday"
+      );
+
+  const totalExpected =
+    rows.reduce(
+      (n,r) =>
+        n + Number(r.dailyPayment || 0),
+      0
+    );
+
+  const totalPaid =
+    rows.reduce(
+      (n,r) =>
+        n + Number(r.paidToday || 0),
+      0
+    );
+
+  const lookupPool =
+    customers
+      .map(x => x.borrower || x)
+      .filter(Boolean);
+
+  const dt2 = v => {
+
+    try{
+
+      return v?.toDate
+        ? v.toDate().toLocaleDateString("en-NG")
+        : v
+          ? String(v)
+          : "—";
+
+    }catch(e){
+
+      return String(v || "—");
+
+    }
+  };
+
+
+  $("printoutReviewBody").innerHTML = `
+
+    <div class="review-grid">
+
+      <div class="review-field">
+        <span>Worker</span>
+        <strong>
+          ${esc(
+            p.workerName ||
+            selected?.name ||
+            "Worker"
+          )}
+        </strong>
+      </div>
+
+      <div class="review-field">
+        <span>Date</span>
+        <strong>
+          ${esc(p.date || p.dateKey || "—")}
+        </strong>
+      </div>
+
+      <div class="review-field">
+        <span>Expected Balance</span>
+        <strong>${money(totalExpected)}</strong>
+      </div>
+
+      <div class="review-field">
+        <span>Current Money Paid</span>
+        <strong>${money(totalPaid)}</strong>
+      </div>
+
+      <div class="review-field">
+        <span>Paid Records</span>
+        <strong>
+          ${
+            rows.filter(
+              r =>
+                String(r.status || "").toLowerCase() ===
+                "paid"
+            ).length
+          }
+        </strong>
+      </div>
+
+      <div class="review-field">
+        <span>Not Paid Records</span>
+        <strong>
+          ${
+            rows.filter(
+              r =>
+                String(r.status || "")
+                  .toLowerCase()
+                  .replace(/\s/g,"") ===
+                "notpaid"
+            ).length
+          }
+        </strong>
+      </div>
+
+    </div>
+
+    <div style="margin-top:14px">
+
+      <h3 style="font-size:12px;margin:0 0 8px">
+        Daily Records
+      </h3>
+
+      <div class="table-wrap">
+
+        <table class="table">
+
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Amount Borrowed</th>
+              <th>Installment</th>
+              <th>Status</th>
+              <th>Paid</th>
+              <th>Remaining</th>
+              <th>Last Paid</th>
+              <th>Default</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            ${
+              rows.length
+
+                ? rows.map(r => {
+
+                    const st =
+                      String(
+                        r.status || "notpaid"
+                      ).toLowerCase();
+
+                    const label =
+                      st === "firstday"
+                        ? "FIRST DAY"
+                        : st === "paid"
+                          ? "PAID"
+                          : "NOT PAID";
+
+                    const match =
+                      lookupPool.find(
+                        b =>
+                          String(b.id) ===
+                            String(r.borrowerId) ||
+                          String(b.phone || "")
+                            .replace(/\D/g,"") ===
+                            String(r.phone || "")
+                              .replace(/\D/g,"")
+                      );
+
+                    const lastPaid =
+                      r.lastPaidDate ??
+                      match?.lastPaidDate;
+
+                    const defaultCount =
+                      r.defaultCount ??
+                      match?.defaultCount ??
+                      0;
+
+                    return `
+
+                      <tr>
+
+                        <td>
+                          <strong>
+                            ${esc(r.name || "Customer")}
+                          </strong>
+                          <br>
+                          <small>
+                            ${esc(r.phone || "")}
+                          </small>
+                        </td>
+
+                        <td>
+                          ${money(r.amountBorrowed || 0)}
+                        </td>
+
+                        <td>
+                          <strong>
+                            ${money(r.dailyPayment || 0)}
+                          </strong>
+                        </td>
+
+                        <td>
+
+                          <span
+                            class="badge ${
+                              st === "paid"
+                                ? "paid"
+                                : st === "firstday"
+                                  ? "read"
+                                  : "notpaid"
+                            }"
+                          >
+                            ${label}
+                          </span>
+
+                        </td>
+
+                        <td>
+                          ${money(r.paidToday || 0)}
+                        </td>
+
+                        <td>
+                          ${money(r.remainingBalance || 0)}
+                        </td>
+
+                        <td>
+                          ${esc(dt2(lastPaid))}
+                        </td>
+
+                        <td>
+                          ${esc(defaultCount)}
+                        </td>
+
+                      </tr>
+
+                    `;
+
+                  }).join("")
+
+                : `
+                  <tr>
+                    <td
+                      colspan="8"
+                      class="empty"
+                    >
+                      No records in this print out.
+                    </td>
+                  </tr>
+                `
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+  `;
+
+
+  $("savePrintoutEditBtn").style.display = "none";
+
+  const editBtn =
+    $("printoutEditModeBtn");
+
+  if(editBtn){
+
+    editBtn.style.display = "inline-flex";
+
+    editBtn.onclick =
+      () => openPrintoutEdit(id);
+  }
+
+  $("printoutReviewModal")
+    .classList.add("open");
+}
+
+
+/* =========================================================
+   SAVE PRINTOUT CORRECTIONS
+   ========================================================= */
+
+async function savePrintoutCorrections(){
+
+  const p =
+    printouts.find(
+      x => x.id === editingPrintoutId
+    );
+
+  if(!p || !selected) return;
+
+  const rows =
+    (Array.isArray(p.records) ? p.records : [])
+      .filter(
+        r =>
+          String(r.status || "").toLowerCase() !==
+          "firstday"
+      )
+      .map(r => ({...r}));
+
+  const workerCustomers =
+    customers
+      .map(x => x.borrower || x)
+      .filter(Boolean);
+
+  const dateKey =
+    p.dateKey || today();
+
+  try{
+
+    const edited =
+      rows.map((r,i) => {
+
+        const cid =
+          document.querySelector(
+            `[data-edit-customer="${i}"]`
+          )?.value;
+
+        const b =
+          workerCustomers.find(
+            x => String(x.id) === String(cid)
+          );
+
+        const status =
+          document.querySelector(
+            `[data-edit-status="${i}"]`
+          )?.value ||
+          r.status ||
+          "notpaid";
+
+        const raw =
+          document.querySelector(
+            `[data-edit-amount="${i}"]`
+          )?.value ||
+          "0";
+
+        const amount =
+          Number(
+            String(raw).replace(/,/g,"")
+          ) || 0;
+
+        return {
+          ...r,
+          borrowerId:
+            b?.id || r.borrowerId,
+          name:
+            b?.name || r.name,
+          phone:
+            b?.phone || r.phone,
+          status,
+          paidToday:
+            status === "paid"
+              ? amount
+              : 0,
+          remainingBalance:
+            Number(
+              b?.remaining ??
+              b?.remainingBalance ??
+              r.remainingBalance ??
+              0
+            ),
+          lastPaidDate:
+            status === "paid"
+              ? (r.lastPaidDate || dateKey)
+              : r.lastPaidDate
+        };
+      });
+
+
+    /*
+      Update each original borrower and each newly selected
+      borrower. If a record was moved to another customer,
+      the old customer is restored and the new customer
+      receives the payment.
+    */
+
+    const pairs =
+      rows.map(
+        (oldRow,i) => ({
+          oldRow,
+          newRow:edited[i]
+        })
+      );
+
+    const touched = new Map();
+
+    for(const pair of pairs){
+
+      const oldKey =
+        String(
+          pair.oldRow.borrowerId ||
+          pair.oldRow.phone ||
+          pair.oldRow.name
+        );
+
+      const newKey =
+        String(
+          pair.newRow.borrowerId ||
+          pair.newRow.phone ||
+          pair.newRow.name
+        );
+
+      if(!touched.has(oldKey)){
+
+        touched.set(
+          oldKey,
+          {
+            original:pair.oldRow,
+            changes:[]
+          }
+        );
+      }
+
+      touched
+        .get(oldKey)
+        .changes.push({
+          type:"old",
+          row:pair.oldRow,
+          newRow:pair.newRow,
+          newKey
+        });
+
+      if(newKey !== oldKey){
+
+        if(!touched.has(newKey)){
+
+          touched.set(
+            newKey,
+            {
+              original:null,
+              changes:[]
+            }
+          );
+        }
+
+        touched
+          .get(newKey)
+          .changes.push({
+            type:"new",
+            row:pair.newRow,
+            oldRow:pair.oldRow,
+            oldKey
+          });
+      }
+    }
+
+
+    for(const entry of touched.values()){
+
+      const key =
+        entry.original
+          ? String(
+              entry.original.borrowerId ||
+              entry.original.phone ||
+              entry.original.name
+            )
+          : String(
+              entry.changes[0]?.row?.borrowerId ||
+              entry.changes[0]?.row?.phone ||
+              entry.changes[0]?.row?.name ||
+              ""
+            );
+
+      const borrower =
+        workerCustomers.find(
+          b =>
+            String(b.id) === String(key) ||
+            String(b.phone || "")
+              .replace(/\D/g,"") ===
+            String(key)
+              .replace(/\D/g,"")
+        );
+
+      if(!borrower) continue;
+
+      const next = {...borrower};
+
+      if(
+        !next.collectionChecks ||
+        typeof next.collectionChecks !== "object"
+      ){
+
+        next.collectionChecks = {};
+      }
+
+      let effectiveStatus = null;
+      let effectivePaid = null;
+
+
+      for(const ch of entry.changes){
+
+        if(
+          ch.type === "old" &&
+          ch.newKey !==
+            String(
+              ch.oldRow.borrowerId ||
+              ch.oldRow.phone ||
+              ch.oldRow.name
+            )
+        ){
+
+          const oldPaid =
+            Number(ch.oldRow.paidToday || 0);
+
+          next.remaining =
+            Number(next.remaining || 0) +
+            oldPaid;
+
+          next.collectionHistory =
+            (
+              Array.isArray(next.collectionHistory)
+                ? next.collectionHistory
+                : []
+            ).filter(
+              e =>
+                !(
+                  e.dateKey === dateKey &&
+                  e.status === "paid"
+                )
+            );
+
+          next.collectionChecks[dateKey] =
+            String(
+              ch.oldRow.status || "notpaid"
+            ) === "firstday"
+              ? "firstday"
+              : "notpaid";
+
+          next.defaultCount =
+            Math.max(
+              0,
+              Number(next.defaultCount || 0) -
+              (
+                String(
+                  ch.oldRow.status || ""
+                ) === "notpaid"
+                  ? 1
+                  : 0
+              )
+            );
+
+          effectiveStatus =
+            next.collectionChecks[dateKey];
+
+          effectivePaid = 0;
+
+        }else if(ch.type === "old"){
+
+          const oldPaid =
+            Number(ch.oldRow.paidToday || 0);
+
+          const newPaid =
+            Number(ch.newRow.paidToday || 0);
+
+          const status =
+            ch.newRow.status ||
+            "notpaid";
+
+          next.remaining =
+            Math.max(
+              0,
+              Number(next.remaining || 0) +
+              oldPaid -
+              newPaid
+            );
+
+          next.collectionHistory =
+            (
+              Array.isArray(next.collectionHistory)
+                ? next.collectionHistory
+                : []
+            ).filter(
+              e =>
+                !(
+                  e.dateKey === dateKey &&
+                  e.status === "paid"
+                )
+            );
+
+          if(status === "paid"){
+
+            next.collectionHistory.push({
+              id:
+                `ADMIN-CORR-${Date.now()}-${Math.random()
+                  .toString(36)
+                  .slice(2,7)}`,
+              dateKey,
+              date:p.date || dateKey,
+              status:"paid",
+              amount:newPaid,
+              method:"Admin correction",
+              note:"Corrected from submitted print out"
+            });
+
+            next.lastPaidDate =
+              dateKey;
+
+            next.collectionChecks[dateKey] =
+              "paid";
+
+            next.defaultCount =
+              Math.max(
+                0,
+                Number(next.defaultCount || 0) -
+                (
+                  String(
+                    ch.oldRow.status || ""
+                  ) === "notpaid"
+                    ? 1
+                    : 0
+                )
+              );
+
+          }else if(status === "firstday"){
+
+            next.collectionChecks[dateKey] =
+              "firstday";
+
+          }else{
+
+            next.collectionChecks[dateKey] =
+              "notpaid";
+
+            if(
+              String(
+                ch.oldRow.status || ""
+              ) !== "notpaid"
+            ){
+
+              next.defaultCount =
+                Number(next.defaultCount || 0) +
+                1;
+            }
+          }
+
+          effectiveStatus = status;
+          effectivePaid = newPaid;
+
+        }else if(ch.type === "new"){
+
+          const amount =
+            Number(ch.row.paidToday || 0);
+
+          const status =
+            ch.row.status ||
+            "notpaid";
+
+          next.collectionHistory =
+            (
+              Array.isArray(next.collectionHistory)
+                ? next.collectionHistory
+                : []
+            ).filter(
+              e =>
+                !(
+                  e.dateKey === dateKey &&
+                  e.status === "paid"
+                )
+            );
+
+          next.remaining =
+            Math.max(
+              0,
+              Number(next.remaining || 0) -
+              amount
+            );
+
+          if(status === "paid"){
+
+            next.collectionHistory.push({
+              id:
+                `ADMIN-CORR-${Date.now()}-${Math.random()
+                  .toString(36)
+                  .slice(2,7)}`,
+              dateKey,
+              date:p.date || dateKey,
+              status:"paid",
+              amount,
+              method:"Admin correction",
+              note:
+                "Payment moved to correct customer by administration"
+            });
+
+            next.collectionChecks[dateKey] =
+              "paid";
+
+            next.lastPaidDate =
+              dateKey;
+
+          }else if(status === "firstday"){
+
+            next.collectionChecks[dateKey] =
+              "firstday";
+
+          }else{
+
+            next.collectionChecks[dateKey] =
+              "notpaid";
+
+            next.defaultCount =
+              Number(next.defaultCount || 0) +
+              1;
+          }
+
+          effectiveStatus = status;
+          effectivePaid = amount;
+        }
+      }
+
+
+      await updateDoc(
+        doc(
+          db,
+          "workerBorrowers",
+          `${selected.uid}_${next.id}`
+        ),
+        {
+          borrower:next,
+          updatedAt:serverTimestamp()
+        }
+      );
+
+
+      const opSnap =
+        await getDocs(
+          query(
+            collection(db,"dailyOperations"),
+            where(
+              "workerId",
+              "==",
+              selected.uid
+            ),
+            where(
+              "dateKey",
+              "==",
+              dateKey
+            )
+          )
+        );
+
+
+      const matchingOps =
+        opSnap.docs.filter(
+          d =>
+            String(
+              d.data()?.borrowerId || ""
+            ) ===
+            String(next.id)
+        );
+
+
+      if(matchingOps.length){
+
+        const latest =
+          matchingOps
+            .slice()
+            .sort(
+              (a,b) =>
+                (
+                  b.data().createdAt
+                    ?.toDate?.()
+                    ?.getTime?.() || 0
+                ) -
+                (
+                  a.data().createdAt
+                    ?.toDate?.()
+                    ?.getTime?.() || 0
+                )
+            )[0];
+
+        await updateDoc(
+          latest.ref,
+          {
+            paymentStatus:
+              effectiveStatus ||
+              next.collectionChecks[dateKey] ||
+              "notpaid",
+
+            amount:
+              Number(effectivePaid || 0),
+
+            paidAmount:
+              Number(effectivePaid || 0),
+
+            remainingBalance:
+              Number(next.remaining || 0),
+
+            defaultCount:
+              Number(next.defaultCount || 0),
+
+            action:"Admin correction",
+
+            note:
+              "Corrected from submitted print out",
+
+            updatedAt:
+              serverTimestamp()
+          }
+        );
+
+      }else{
+
+        await addDoc(
+          collection(db,"dailyOperations"),
+          {
+            workerId:selected.uid,
+            workerName:
+              selected.name ||
+              selected.username ||
+              selected.email ||
+              "Worker",
+
+            borrowerId:next.id,
+
+            customerName:
+              next.name || "",
+
+            customerPhone:
+              next.phone || "",
+
+            paymentStatus:
+              effectiveStatus ||
+              next.collectionChecks[dateKey] ||
+              "notpaid",
+
+            amount:
+              Number(effectivePaid || 0),
+
+            paidAmount:
+              Number(effectivePaid || 0),
+
+            remainingBalance:
+              Number(next.remaining || 0),
+
+            lastPaidDate:
+              next.lastPaidDate || "",
+
+            defaultCount:
+              Number(next.defaultCount || 0),
+
+            completed:
+              Number(next.remaining || 0) === 0,
+
+            action:"Admin correction",
+
+            note:
+              "Corrected from submitted print out",
+
+            dateKey,
+
+            createdAt:
+              serverTimestamp(),
+
+            updatedAt:
+              serverTimestamp()
+          }
+        );
+      }
+    }
+
+
+    const paidCount =
+      edited.filter(
+        r => r.status === "paid"
+      ).length;
+
+    const notPaidCount =
+      edited.filter(
+        r => r.status === "notpaid"
+      ).length;
+
+    const firstDayCount = 0;
+
+    const totalPaid =
+      edited.reduce(
+        (n,r) =>
+          n + Number(r.paidToday || 0),
+        0
+      );
+
+    const totalExpected =
+      edited.reduce(
+        (n,r) =>
+          n +
+          (
+            r.status === "firstday"
+              ? 0
+              : Number(r.dailyPayment || 0)
+          ),
+        0
+      );
+
+    const totalOutstanding =
+      Math.max(
+        0,
+        totalExpected - totalPaid
+      );
+
+
+    await updateDoc(
+      doc(
+        db,
+        "workerPrintouts",
+        p.id
+      ),
+      {
+        records:edited,
+        paidCount,
+        notPaidCount,
+        firstDayCount,
+        totalPaid,
+        totalExpected,
+        totalOutstanding,
+
+        content:
+          edited
+            .map(
+              r =>
+                `${r.name} | ${String(r.status || "").toUpperCase()} | Installment: ₦${Number(r.dailyPayment || 0).toLocaleString("en-NG")} | Paid Today: ₦${Number(r.paidToday || 0).toLocaleString("en-NG")} | Remaining: ₦${Number(r.remainingBalance || 0).toLocaleString("en-NG")} | Last Paid: ${r.lastPaidDate || "—"} | Default: ${Number(r.defaultCount || 0)}`
+            )
+            .join("\n"),
+
+        correctedBy:
+          admin.uid,
+
+        correctedAt:
+          serverTimestamp(),
+
+        correctionNote:
+          "Edited by administration"
+      }
+    );
+
+    toast(
+      "Changes saved and updated on the worker dashboard"
+    );
+
+    await loadStaffData();
+
+    closePrintoutReview();
+
+  }catch(e){
+
+    console.error(
+      "Printout correction failed",
+      e
+    );
+
+    toast(
+      `Correction failed: ${e?.code || "check Firestore rules"}`
+    );
+  }
+}
+
+$("savePrintoutEditBtn").onclick =
+  savePrintoutCorrections;
+
+window.closePrintoutReview =
+  closePrintoutReview;
+
+window.openPrintoutReview =
+  openPrintoutReview;
+
+window.openPrintoutEdit =
+  openPrintoutEdit;
+
+
+/* =========================================================
+   OLD FORM VIEW HELPER
+   ========================================================= */
+
+function openLoanRequest(id){
+
+  const a =
+    loanRequests.find(
+      x => x.id === id
+    );
+
+  if(!a) return;
+
+  const w =
+    staff.find(
+      x => x.uid === a.workerId
+    );
+
+  if(w) detail(w);
+
+  setTimeout(
+    () => tab("forms"),
+    80
+  );
+}
+
+
+/* =========================================================
+   APPROVE / REJECT LOAN
+   ========================================================= */
+
+async function reviewLoanRequest(id,status){
+
+  const a =
+    loanRequests.find(
+      x => x.id === id
+    );
+
+  if(!a || !admin){
+
+    toast(
+      "Application or administrator session not found"
+    );
+
+    return false;
+  }
+
+
+  const buttons =
+    [
+      ...document.querySelectorAll(
+        "[data-loan-approve],[data-loan-reject],[data-review-approve],[data-review-reject]"
+      )
+    ].filter(
+      b =>
+        b.dataset.loanApprove === id ||
+        b.dataset.loanReject === id ||
+        b.dataset.reviewApprove === id ||
+        b.dataset.reviewReject === id
+    );
+
+
+  buttons.forEach(b => {
+
+    b.disabled = true;
+
+    b.dataset.originalText =
+      b.textContent;
+
+    b.textContent =
+      status === "approved"
+        ? "Approving..."
+        : "Rejecting...";
+  });
+
+
+  try{
+
+    let decisionData = {
+      status:String(status),
+      approvalStatus:String(status),
+      reviewedBy:admin.uid,
+      reviewedAt:serverTimestamp()
+    };
+
+
+    if(String(status) === "approved"){
+
+      const amount =
+        Number(
+          String(
+            $("adminLoanAmount")?.value ||
+            a.amount ||
+            ""
+          ).replace(/,/g,"")
+        ) || 0;
+
+      const totalRepayment =
+        Number(
+          String(
+            $("adminLoanTotal")?.value ||
+            a.totalRepayment ||
+            ""
+          ).replace(/,/g,"")
+        ) || 0;
+
+
+      if(
+        amount <= 0 ||
+        totalRepayment <= 0
+      ){
+
+        toast(
+          "Enter the amount borrowed and the amount to be repaid before approving."
+        );
+
+        buttons.forEach(b => {
+
+          b.disabled = false;
+
+          b.textContent =
+            b.dataset.originalText ||
+            b.textContent;
+
+        });
+
+        return false;
+      }
+
+
+      const dailyPayment =
+        Number(
+          (totalRepayment / 30).toFixed(2)
+        );
+
+
+      decisionData.amount =
+        amount;
+
+      decisionData.dailyPayment =
+        dailyPayment;
+
+      decisionData.totalRepayment =
+        totalRepayment;
+
+      decisionData.description =
+        `${a.name || "Customer"} • ${a.phone || ""} • Approved ${money(amount)} • Repaying ${money(totalRepayment)} over 30 days • Installment ${money(dailyPayment)}`;
+    }
+
+
+    await updateDoc(
+      doc(db,"workerForms",id),
+      decisionData
+    );
+
+
+    const local =
+      loanRequests.find(
+        x => x.id === id
+      );
+
+    if(local){
+
+      local.status = status;
+      local.approvalStatus = status;
+      local.reviewedBy = admin.uid;
+    }
+
+
+    renderLoanRequests();
+    closeLoanReview();
+
+    toast(
+      status === "approved"
+        ? "Loan approved successfully."
+        : "Loan application rejected successfully."
+    );
+
+
+    try{
+
+      await addDoc(
+        collection(db,"workerNotifications"),
+        {
+          workerId:a.workerId,
+          workerName:
+            a.workerName || "Worker",
+
+          type:"loan_application",
+          referenceId:id,
+
+          title:
+            status === "approved"
+              ? "Loan Form Approved"
+              : "Loan Form Rejected",
+
+          message:
+            status === "approved"
+              ? `Your loan form for ${a.name || "the customer"} has been approved. The loan book is now ready.`
+              : `Your loan form for ${a.name || "the customer"} was rejected by administration.`,
+
+          read:false,
+          createdAt:serverTimestamp()
+        }
+      );
+
+    }catch(e){
+
+      console.warn(
+        "Notification failed after decision",
+        e
+      );
+    }
+
+
+    try{
+
+      await addDoc(
+        collection(db,"workerActivity"),
+        {
+          workerId:a.workerId,
+          workerName:
+            a.workerName || "Worker",
+
+          targetName:
+            a.name || "Customer",
+
+          customerName:
+            a.name || "Customer",
+
+          action:
+            status === "approved"
+              ? "Loan form approved"
+              : "Loan form rejected",
+
+          details:
+            `Admin ${status} loan form ${id}`,
+
+          createdAt:
+            serverTimestamp()
+        }
+      );
+
+    }catch(e){
+
+      console.warn(
+        "Activity failed after decision",
+        e
+      );
+    }
+
+
+    if(
+      selected?.uid ===
+      a.workerId
+    ){
+
+      await loadStaffData()
+        .catch(() => {});
+    }
+
+
+    await loadLoanRequests()
+      .catch(() => {});
+
+    await counts()
+      .catch(() => {});
+
+    return true;
+
+  }catch(e){
+
+    console.error(
+      "CRITICAL loan review update failed:",
+      e
+    );
+
+    buttons.forEach(b => {
+
+      b.disabled = false;
+
+      b.textContent =
+        b.dataset.originalText ||
+        b.textContent;
+
+    });
+
+    toast(
+      `Could not ${
+        status === "approved"
+          ? "approve"
+          : "reject"
+      } this application: ${
+        e?.code ||
+        "permission-denied"
+      }`
+    );
+
+    return false;
+  }
+}
+
+
+/* =========================================================
+   LOAN REQUEST LOADING
+   ========================================================= */
+
+async function loadLoanRequests(){
+
+  try{
+
+    const snap =
+      await getDocs(
+        query(
+          collection(db,"workerForms"),
+          where(
+            "formType",
+            "==",
+            "loan_application"
+          )
+        )
+      );
+
+    loanRequests =
+      snap.docs.map(d => ({
+        id:d.id,
+        ...d.data()
+      }));
+
+    renderLoanRequests();
+
+  }catch(e){
+
+    console.error(
+      "Loan requests load failed",
+      e
+    );
+
+    loanRequests = [];
+
+    renderLoanRequests();
+  }
+}
+
+
+$("loanRequestList").onclick =
+  async e => {
+
+    const view =
+      e.target.closest(
+        "[data-loan-view]"
+      );
+
+    const approve =
+      e.target.closest(
+        "[data-loan-approve]"
+      );
+
+    const reject =
+      e.target.closest(
+        "[data-loan-reject]"
+      );
+
+
+    if(view){
+
+      e.preventDefault();
+
+      openLoanReview(
+        view.dataset.loanView
+      );
+
+      return;
+    }
+
+
+    if(approve){
+
+      e.preventDefault();
+
+      /*
+       * Open the complete review first.
+       * The admin enters the approved amount and
+       * total repayment inside the review modal.
+       */
+      openLoanReview(
+        approve.dataset.loanApprove
+      );
+
+      return;
+    }
+
+
+    if(reject){
+
+      e.preventDefault();
+
+      await reviewLoanRequest(
+        reject.dataset.loanReject,
+        "rejected"
+      );
+
+      return;
+    }
+  };
+
+
+function startLoanFormListener(){
+
+  if(loanFormsUnsub)
+    loanFormsUnsub();
+
+  loanFormsUnsub =
+    onSnapshot(
+      query(
+        collection(db,"workerForms"),
+        where(
+          "formType",
+          "==",
+          "loan_application"
+        )
+      ),
+      snap => {
+
+        loanRequests =
+          snap.docs.map(d => ({
+            id:d.id,
+            ...d.data()
+          }));
+
+        renderLoanRequests();
+
+        const pending =
+          loanRequests.filter(
+            x =>
+              String(
+                x.status || "pending"
+              ).toLowerCase() ===
+              "pending"
+          );
+
+        $("formCount").textContent =
+          String(pending.length);
+
+      },
+      e =>
+        console.warn(
+          "Loan form listener failed:",
+          e
+        )
+    );
+}
+
+
+/* =========================================================
+   STAFF LOADING
+   ========================================================= */
+
+async function loadStaff(){
+
+  const grid =
+    $("staffGrid");
+
+  if(grid){
+
+    grid.innerHTML =
+      '<div class="loading" style="grid-column:1/-1">' +
+      'Loading available staff accounts...' +
+      '</div>';
+  }
+
+
+  try{
+
+    const snap =
+      await getDocs(
+        collection(db,"users")
+      );
+
+    staff =
+      snap.docs
+        .map(d => ({
+          uid:d.id,
+          ...d.data()
+        }))
+        .filter(
+          x =>
+            ["worker","staff"].includes(
+              String(
+                x.role || ""
+              )
+                .toLowerCase()
+                .trim()
+            )
+        );
+
+
+    /*
+     * Customer counts are optional.
+     * If the workerBorrowers collection cannot be read,
+     * staff accounts will still be displayed.
+     */
+
+    try{
+
+      const b =
+        await getDocs(
+          collection(db,"workerBorrowers")
+        );
+
+      const customerCounts = {};
+
+      b.docs.forEach(d => {
+
+        const w =
+          d.data()?.workerId;
+
+        if(w){
+
+          customerCounts[w] =
+            (customerCounts[w] || 0) + 1;
+        }
+
+      });
+
+
+      staff =
+        staff.map(w => ({
+          ...w,
+          customerCount:
+            customerCounts[w.uid] || 0
+        }));
+
+    }catch(customerError){
+
+      console.warn(
+        "Customer counts unavailable:",
+        customerError
+      );
+
+      staff =
+        staff.map(w => ({
+          ...w,
+          customerCount:"—"
+        }));
+    }
+
+
+    $("staffCount").textContent =
+      staff.length;
+
+    renderStaff();
+
+
+    if(
+      !staff.length &&
+      grid
+    ){
+
+      grid.innerHTML = `
+        <div
+          class="empty"
+          style="grid-column:1/-1"
+        >
+          <strong
+            style="
+              display:block;
+              color:var(--ink);
+              margin-bottom:7px
+            "
+          >
+            No staff accounts found
+          </strong>
+
+          <span>
+            Firestore is connected, but no users
+            have role set to worker or staff.
+          </span>
+        </div>
+      `;
+    }
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "Staff loading error:",
+      error
+    );
+
+    const code =
+      String(
+        error?.code || ""
+      );
+
+    let message =
+      "Unable to load staff accounts.";
+
+
+    if(code.includes("permission-denied")){
+
+      message =
+        "Permission denied while reading users. Make sure this signed-in admin has admins/{uid} with role: admin in the same Firebase project.";
+
+    }else if(
+      code.includes("failed-precondition")
+    ){
+
+      message =
+        "Firestore could not complete the staff query. Check the Firebase project and Firestore setup.";
+
+    }else if(
+      code.includes("unavailable")
+    ){
+
+      message =
+        "Firestore is temporarily unavailable. Check your internet connection and try Refresh again.";
+
+    }else if(error?.message){
+
+      message =
+        "Staff accounts could not be loaded: " +
+        error.message;
+    }
+
+
+    if(grid){
+
+      grid.innerHTML = `
+
+        <div
+          class="empty firebase-error"
+          style="grid-column:1/-1"
+        >
+
+          <strong
+            style="
+              display:block;
+              color:var(--ink);
+              margin-bottom:8px
+            "
+          >
+            Staff accounts could not be loaded
+          </strong>
+
+          <span>
+            ${esc(message)}
+          </span>
+
+          <button
+            class="primary"
+            style="margin-top:14px"
+            onclick="loadStaff()"
+          >
+            Try Again
+          </button>
+
+        </div>
+      `;
+    }
+
+    $("staffCount").textContent = "—";
+
+    return false;
+  }
+}
+
+
+/* =========================================================
+   COUNTERS
+   ========================================================= */
+
+async function counts(){
+
+  try{
+
+    $("operationCount").textContent =
+      (
+        await getDocs(
+          query(
+            collection(db,"dailyOperations"),
+            where(
+              "dateKey",
+              "==",
+              today()
+            )
+          )
+        )
+      ).size;
+
+  }catch(e){
+
+    $("operationCount").textContent = "—";
+  }
+
+
+  try{
+
+    const s =
+      await getDocs(
+        query(
+          collection(db,"workerForms"),
+          where(
+            "formType",
+            "==",
+            "loan_application"
+          )
+        )
+      );
+
+    const pending =
+      s.docs.filter(
+        d =>
+          String(
+            d.data()?.status ||
+            "pending"
+          ).toLowerCase() ===
+          "pending"
+      ).length;
+
+    $("formCount").textContent =
+      pending;
+
+  }catch(e){
+
+    $("formCount").textContent = "—";
+  }
+}
+
+
+async function loadAll(){
+
+  const results =
+    await Promise.allSettled([
+      loadStaff(),
+      loadLoanRequests(),
+      counts()
+    ]);
+
+  const failed =
+    results.filter(
+      r => r.status === "rejected"
+    );
+
+  if(failed.length){
+
+    console.warn(
+      "Some dashboard sections failed to load:",
+      failed
+    );
+
+  }else{
+
+    toast("Dashboard refreshed");
+  }
+}
+
+
+/* =========================================================
+   STAFF DATA
+   ========================================================= */
+
+async function loadStaffData(){
+
+  const w =
+    selected?.uid;
+
+  if(!w) return;
+
+  const requestedWorker =
+    w;
+
+  try{
+
+    const [
+      a,
+      b,
+      c,
+      d,
+      e,
+      userSnap
+    ] = await Promise.all([
+
+      getDocs(
+        query(
+          collection(db,"workerBorrowers"),
+          where(
+            "workerId",
+            "==",
+            requestedWorker
+          )
+        )
+      ),
+
+      getDocs(
+        query(
+          collection(db,"dailyOperations"),
+          where(
+            "workerId",
+            "==",
+            requestedWorker
+          ),
+          where(
+            "dateKey",
+            "==",
+            today()
+          )
+        )
+      ),
+
+      getDocs(
+        query(
+          collection(db,"workerPrintouts"),
+          where(
+            "workerId",
+            "==",
+            requestedWorker
+          )
+        )
+      ),
+
+      getDocs(
+        query(
+          collection(db,"workerForms"),
+          where(
+            "workerId",
+            "==",
+            requestedWorker
+          )
+        )
+      ),
+
+      getDocs(
+        query(
+          collection(db,"workerMessages"),
+          where(
+            "workerId",
+            "==",
+            requestedWorker
+          )
+        )
+      ),
+
+      getDoc(
+        doc(
+          db,
+          "users",
+          requestedWorker
+        )
+      )
+    ]);
+
+
+    if(
+      selected?.uid !==
+      requestedWorker
+    ) return;
+
+
+    customers =
+      a.docs.map(
+        x => ({
+          id:x.id,
+          ...x.data()
+        })
+      );
+
+
+    staffCustomerProfiles =
+      Array.isArray(
+        userSnap.data()?.customers
+      )
+        ? userSnap.data().customers.map(
+            (c,i) => ({
+              id:
+                c.id ||
+                c.customerId ||
+                c.phone ||
+                `customer-${i}`,
+              ...c
+            })
+          )
+        : [];
+
+
+    operations =
+      b.docs.map(
+        x => ({
+          id:x.id,
+          ...x.data()
+        })
+      );
+
+
+    printouts =
+      c.docs.map(
+        x => ({
+          id:x.id,
+          ...x.data()
+        })
+      );
+
+
+    forms =
+      d.docs.map(
+        x => ({
+          id:x.id,
+          ...x.data()
+        })
+      );
+
+
+    messages =
+      e.docs.map(
+        x => ({
+          id:x.id,
+          ...x.data()
+        })
+      );
+
+
+    renderOperations();
+    renderCustomers();
+    renderPrintouts();
+    renderForms();
+    renderMessages();
+    renderTransfer();
+
+  }catch(e){
+
+    console.error(e);
+
+    toast(
+      "Some staff data could not be loaded"
+    );
+  }
+}
+
+
+/* =========================================================
+   LIVE OPERATIONS
+   ========================================================= */
+
+function renderOperations(){
+
+  const list =
+    customers.map(
+      x => x.borrower || x
+    );
+
+  const opMap =
+    new Map();
+
+
+  operations
+    .slice()
+    .sort(
+      (a,b) =>
+        (
+          b.createdAt
+            ?.toDate?.()
+            ?.getTime?.() || 0
+        ) -
+        (
+          a.createdAt
+            ?.toDate?.()
+            ?.getTime?.() || 0
+        )
+    )
+    .forEach(o => {
+
+      const key =
+        o.borrowerId ||
+        o.customerPhone ||
+        o.customerName;
+
+      if(!opMap.has(key)){
+        opMap.set(key,o);
+      }
+
+    });
+
+
+  const active =
+    list.filter(
+      b =>
+        Number(
+          b.remaining ||
+          b.remainingBalance ||
+          0
+        ) > 0
+    );
+
+
+  const paid =
+    active.filter(b => {
+
+      const o =
+        opMap.get(b.id) ||
+        opMap.get(b.phone);
+
+      return String(
+        o?.paymentStatus ||
+        o?.status ||
+        b.paymentStatus ||
+        b.todayStatus ||
+        ""
+      ).toLowerCase() === "paid";
+
+    }).length;
+
+
+  const notPaid =
+    active.filter(b => {
+
+      const o =
+        opMap.get(b.id) ||
+        opMap.get(b.phone);
+
+      const st =
+        String(
+          o?.paymentStatus ||
+          o?.status ||
+          b.paymentStatus ||
+          b.todayStatus ||
+          ""
+        )
+          .toLowerCase()
+          .replace(/\s/g,"");
+
+      return st === "notpaid";
+
+    }).length;
+
+
+  const present =
+    active.length;
+
+
+  /*
+   * Expected Balance is the total of every active
+   * customer's daily installment.
+   */
+
+  const totalExpected =
+    active.reduce(
+      (sum,b) =>
+        sum + Number(
+          b.dailyPayment || 0
+        ),
+      0
+    );
+
+
+  /*
+   * Current Money Paid is cumulative for today.
+   * Every PAID checkout is counted separately.
+   */
+
+  const currentPaid =
+    operations.reduce(
+      (sum,o) => {
+
+        const st =
+          String(
+            o.paymentStatus ||
+            o.status ||
+            ""
+          )
+            .toLowerCase()
+            .replace(/\s/g,"");
+
+        return st === "paid"
+          ? sum +
+            Number(
+              o.paidAmount ??
+              o.amount ??
+              0
+            )
+          : sum;
+
+      },
+      0
+    );
+
+
+  $("opSummary").textContent =
+    `${present} present loan${present === 1 ? "" : "s"}`;
+
+
+  $("quickSummary").innerHTML = `
+
+    <div class="quick-money-grid">
+
+      <div class="quick-money-card">
+        <span>Expected Balance</span>
+        <strong>${money(totalExpected)}</strong>
+      </div>
+
+      <div class="quick-money-card">
+        <span>Current Money Paid</span>
+        <strong>${money(currentPaid)}</strong>
+      </div>
+
+    </div>
+
+    <div class="monitor-summary">
+
+      <div class="monitor-stat">
+        <span>Paid Today</span>
+        <strong>${paid}</strong>
+      </div>
+
+      <div class="monitor-stat">
+        <span>Not Paid</span>
+        <strong>${notPaid}</strong>
+      </div>
+
+      <div class="monitor-stat">
+        <span>Present Loans</span>
+        <strong>${present}</strong>
+      </div>
+
+    </div>
+
+    <div class="panel-body">
+
+      <div class="monitor-note">
+        Live view. Expected Balance is the total daily
+        collection expected today. Current Money Paid
+        changes only when a borrower is currently marked PAID.
+      </div>
+
+    </div>
+
+  `;
+
+
+  $("operationsList").innerHTML =
+    list.length
+
+      ? `
+        <div class="table-wrap">
+
+          <table class="monitor-table">
+
+            <thead>
+
+              <tr>
+                <th>Borrower</th>
+                <th>Daily Payment</th>
+                <th>Today's Status</th>
+                <th>Remaining</th>
+                <th>Loan Status</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${
+                list.map(b => {
+
+                  const o =
+                    opMap.get(b.id) ||
+                    opMap.get(b.phone) ||
+                    {};
+
+                  const st0 =
+                    String(
+                      o.paymentStatus ||
+                      o.status ||
+                      b.paymentStatus ||
+                      b.todayStatus ||
+                      ""
+                    )
+                      .toLowerCase()
+                      .replace(/\s/g,"");
+
+                  const borrowerToday =
+                    String(
+                      b.collectionChecks?.[today()] ||
+                      ""
+                    )
+                      .toLowerCase()
+                      .replace(/\s/g,"");
+
+                  const st =
+                    st0 ||
+                    borrowerToday ||
+                    "pending";
+
+                  const paidNow =
+                    st === "paid";
+
+                  const firstDay =
+                    st === "firstday" ||
+                    borrowerToday === "firstday";
+
+                  const pendingNow =
+                    st === "pending";
+
+
+                  return `
+
+                    <tr>
+
+                      <td>
+
+                        <strong>
+                          ${esc(
+                            b.name ||
+                            "Customer"
+                          )}
+                        </strong>
+
+                        <br>
+
+                        <small>
+                          ${esc(
+                            b.phone ||
+                            "—"
+                          )}
+                        </small>
+
+                      </td>
+
+                      <td>
+                        ${money(
+                          b.dailyPayment ||
+                          0
+                        )}
+                      </td>
+
+                      <td>
+
+                        <span
+                          class="badge ${
+                            paidNow
+                              ? "paid"
+                              : firstDay
+                                ? "read"
+                                : pendingNow
+                                  ? "pending"
+                                  : "notpaid"
+                          }"
+                        >
+
+                          ${
+                            paidNow
+                              ? "PAID"
+                              : firstDay
+                                ? "FIRST DAY"
+                                : pendingNow
+                                  ? "PENDING"
+                                  : "NOT PAID"
+                          }
+
+                        </span>
+
+                      </td>
+
+                      <td>
+                        ${money(
+                          b.remaining ||
+                          b.remainingBalance ||
+                          0
+                        )}
+                      </td>
+
+                      <td>
+
+                        <span
+                          class="badge ${
+                            Number(
+                              b.remaining ||
+                              b.remainingBalance ||
+                              0
+                            ) > 0
+                              ? "read"
+                              : "approved"
+                          }"
+                        >
+
+                          ${
+                            Number(
+                              b.remaining ||
+                              b.remainingBalance ||
+                              0
+                            ) > 0
+                              ? "PRESENT LOAN"
+                              : "COMPLETED"
+                          }
+
+                        </span>
+
+                      </td>
+
+                    </tr>
+
+                  `;
+
+                }).join("")
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+      `
+
+      : `
+        <div class="empty">
+          No live loans currently assigned to this worker.
+        </div>
+      `;
+}
+
+
+/* =========================================================
+   LIVE LOAN BOOK
+   ========================================================= */
+
+function startLiveLoanBook(workerId){
+
+  if(liveLoanBookUnsub)
+    liveLoanBookUnsub();
+
+  if(liveOperationsUnsub)
+    liveOperationsUnsub();
+
+
+  /*
+   * Never retain another worker's live arrays
+   * while switching staff.
+   */
+
+  customers = [];
+  staffCustomerProfiles = [];
+  operations = [];
+  printouts = [];
+  forms = [];
+  messages = [];
+
+
+  renderOperations();
+  renderCustomers();
+  renderPrintouts();
+  renderForms();
+  renderMessages();
+  renderTransfer();
+
+
+  if(!workerId) return;
+
+
+  liveLoanBookUnsub =
+    onSnapshot(
+      query(
+        collection(db,"workerBorrowers"),
+        where(
+          "workerId",
+          "==",
+          workerId
+        )
+      ),
+      snap => {
+
+        customers =
+          snap.docs.map(
+            x => ({
+              id:x.id,
+              ...x.data()
+            })
+          );
+
+        renderOperations();
+        renderCustomers();
+        renderTransfer();
+
+      },
+      e =>
+        console.warn(
+          "Live loan book listener failed:",
+          e
+        )
+    );
+
+
+  liveOperationsUnsub =
+    onSnapshot(
+      query(
+        collection(db,"dailyOperations"),
+        where(
+          "workerId",
+          "==",
+          workerId
+        ),
+        where(
+          "dateKey",
+          "==",
+          today()
+        )
+      ),
+      snap => {
+
+        operations =
+          snap.docs.map(
+            x => ({
+              id:x.id,
+              ...x.data()
+            })
+          );
+
+        renderOperations();
+
+      },
+      e =>
+        console.warn(
+          "Live operations listener failed:",
+          e
+        )
+    );
+}
+
+
+/* =========================================================
+   CUSTOMERS
+   ========================================================= */
+
+function renderCustomers(){
+
+  const q =
+    ($("customerSearch")?.value || "")
+      .toLowerCase()
+      .trim();
+
+  const list =
+    staffCustomerProfiles.filter(
+      c =>
+        `${c.name || ""} ${c.phone || ""}`
+          .toLowerCase()
+          .includes(q)
+    );
+
+
+  $("customersTable").innerHTML =
+    list.length
+
+      ? list.map(c => `
+
+        <tr>
+
+          <td>
+            <strong>
+              ${esc(
+                c.name ||
+                "Customer"
+              )}
+            </strong>
+          </td>
+
+          <td>
+
+            <button
+              class="customer-view-btn"
+              data-customer-view="${esc(
+                c.id ||
+                c.customerId ||
+                c.phone ||
+                ""
+              )}"
+            >
+              View
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join("")
+
+      : `
+        <tr>
+          <td
+            colspan="2"
+            class="empty"
+          >
+            No customers registered by this worker.
+          </td>
+        </tr>
+      `;
+
+
+  document
+    .querySelectorAll(
+      "[data-customer-view]"
+    )
+    .forEach(btn => {
+
+      btn.onclick =
+        () =>
+          openCustomerReview(
+            btn.dataset.customerView
+          );
+
+    });
+}
+
+$("customerSearch").oninput =
+  renderCustomers;
+
+
+/* =========================================================
+   CUSTOMER REVIEW
+   ========================================================= */
+
+async function openCustomerReview(id){
+
+  const source =
+    staffCustomerProfiles.find(
+      c =>
+        String(
+          c.id ||
+          c.customerId ||
+          c.phone ||
+          ""
+        ) === String(id)
+    );
+
+  if(!source) return;
+
+
+  const passport =
+    source.passport
+      ? `
+        <img
+          class="review-passport"
+          src="${esc(source.passport)}"
+          alt="Passport"
+        >
+      `
+      : "";
+
+
+  const guarantorPassport =
+    source.guarantorPassport ||
+    source.guarantorPhoto;
+
+
+  const guarantorImage =
+    guarantorPassport
+
+      ? `
+        <div
+          style="
+            display:flex;
+            justify-content:center;
+            margin:8px 0 16px
+          "
+        >
+
+          <div>
+
+            <div
+              style="
+                font-size:9px;
+                font-weight:850;
+                color:var(--muted);
+                margin-bottom:6px;
+                text-align:center
+              "
+            >
+              GUARANTOR PASSPORT
+            </div>
+
+            <img
+              class="review-passport"
+              src="${esc(guarantorPassport)}"
+              alt="Guarantor Passport"
+            >
+
+          </div>
+
+        </div>
+      `
+
+      : "";
+
+
+  const fields = [
+
+    ["Full Name",source.name],
+    ["Phone",source.phone],
+    [
+      "Residential Address",
+      source.residentialAddress
+    ],
+    [
+      "Workshop Address",
+      source.workshopAddress
+    ],
+    [
+      "Guarantor Name",
+      source.guarantorName
+    ],
+    [
+      "Guarantor Phone",
+      source.guarantorPhone
+    ]
+
+  ];
+
+
+  const grid =
+    fields
+      .map(
+        ([label,value]) => `
+          <div class="review-field">
+
+            <span>
+              ${esc(label)}
+            </span>
+
+            <strong>
+              ${esc(value || "—")}
+            </strong>
+
+          </div>
+        `
+      )
+      .join("");
+
+
+  $("customerReviewTitle").textContent =
+    source.name ||
+    "Customer";
+
+  $("customerReviewBody").innerHTML =
+    `${passport}${guarantorImage}
+     <div class="review-grid">
+       ${grid}
+     </div>`;
+
+  $("customerReviewModal")
+    .classList.add("open");
+}
+
+
+function closeCustomerReview(){
+
+  $("customerReviewModal")
+    ?.classList.remove("open");
+}
+
+window.openCustomerReview =
+  openCustomerReview;
+
+window.closeCustomerReview =
+  closeCustomerReview;
+
+
+/* =========================================================
+   PRINTOUT TABLE
+   ========================================================= */
+
+function renderPrintouts(){
+
+  $("printoutsTable").innerHTML =
+    printouts.length
+
+      ? printouts
+          .slice()
+          .sort(
+            (a,b) =>
+              String(
+                b.dateKey || ""
+              ).localeCompare(
+                String(
+                  a.dateKey || ""
+                )
+              )
+          )
+          .map(x => `
+
+            <tr>
+
+              <td>
+                ${esc(
+                  x.date ||
+                  x.dateKey ||
+                  "—"
+                )}
+              </td>
+
+              <td>
+                ${x.paidCount || 0}
+              </td>
+
+              <td>
+                ${x.notPaidCount || 0}
+              </td>
+
+              <td>
+                ${money(x.totalPaid)}
+              </td>
+
+              <td>
+                ${dt(x.createdAt)}
+              </td>
+
+              <td>
+
+                <div
+                  style="
+                    display:flex;
+                    gap:6px;
+                    flex-wrap:wrap
+                  "
+                >
+
+                  <button
+                    class="printout-view-btn"
+                    data-printout-view="${esc(x.id)}"
+                  >
+                    View
+                  </button>
+
+                  <button
+                    class="printout-view-btn"
+                    data-printout-edit="${esc(x.id)}"
+                  >
+                    Edit
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          `).join("")
+
+      : `
+        <tr>
+          <td
+            colspan="6"
+            class="empty"
+          >
+            No submitted print outs.
+          </td>
+        </tr>
+      `;
+
+
+  document
+    .querySelectorAll(
+      "[data-printout-view]"
+    )
+    .forEach(b => {
+
+      b.onclick =
+        () =>
+          openPrintoutReview(
+            b.dataset.printoutView
+          );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      "[data-printout-edit]"
+    )
+    .forEach(b => {
+
+      b.onclick =
+        () =>
+          openPrintoutEdit(
+            b.dataset.printoutEdit
+          );
+
+    });
+}
+
+
+/* =========================================================
+   FORMS
+   ========================================================= */
+
+function renderForms(){
+
+  $("formsList").innerHTML =
+    forms.length
+
+      ? forms.map(x => `
+
+        <div class="form-item">
+
+          <div class="form-item-top">
+
+            <strong>
+              ${esc(
+                x.title ||
+                x.formType ||
+                "Submitted Form"
+              )}
+            </strong>
+
+            <span
+              class="badge ${
+                x.status === "approved"
+                  ? "approved"
+                  : x.status === "rejected"
+                    ? "notpaid"
+                    : "pending"
+              }"
+            >
+              ${esc(
+                String(
+                  x.status ||
+                  "pending"
+                ).toUpperCase()
+              )}
+            </span>
+
+          </div>
+
+          <p>
+            ${esc(
+              x.description ||
+              x.message ||
+              x.content ||
+              "No form description provided."
+            )}
+          </p>
+
+          <small
+            style="color:var(--muted)"
+          >
+            ${dt(x.createdAt)}
+          </small>
+
+          <div
+            class="form-actions"
+            style="margin-top:10px"
+          >
+
+            ${
+              x.formType === "loan_application"
+
+                ? `
+                  <button
+                    class="secondary"
+                    data-loan-form-view="${esc(x.id)}"
+                  >
+                    View
+                  </button>
+                `
+
+                : String(
+                    x.status ||
+                    "pending"
+                  ) === "pending"
+
+                  ? `
+                    <button
+                      class="primary"
+                      style="
+                        padding:8px 11px;
+                        font-size:9px
+                      "
+                      data-a="${esc(x.id)}"
+                    >
+                      Approve
+                    </button>
+
+                    <button
+                      class="danger"
+                      data-r="${esc(x.id)}"
+                    >
+                      Reject
+                    </button>
+                  `
+
+                  : ""
+            }
+
+          </div>
+
+        </div>
+
+      `).join("")
+
+      : `
+        <div class="empty">
+          No forms submitted by this worker.
+        </div>
+      `;
+
+
+  document
+    .querySelectorAll("[data-a]")
+    .forEach(b =>
+      b.onclick =
+        () =>
+          reviewForm(
+            b.dataset.a,
+            "approved"
+          )
+    );
+
+
+  document
+    .querySelectorAll("[data-r]")
+    .forEach(b =>
+      b.onclick =
+        () =>
+          reviewForm(
+            b.dataset.r,
+            "rejected"
+          )
+    );
+
+
+  document
+    .querySelectorAll(
+      "[data-loan-form-view]"
+    )
+    .forEach(b =>
+      b.onclick =
+        () =>
+          openLoanReview(
+            b.dataset.loanFormView
+          )
+    );
+}
+
+
+async function reviewForm(id,status){
+
+  try{
+
+    const form =
+      forms.find(
+        x => x.id === id
+      ) || {};
+
+
+    await updateDoc(
+      doc(
+        db,
+        "workerForms",
+        id
+      ),
+      {
+        status,
+        reviewedBy:admin.uid,
+        reviewedAt:serverTimestamp(),
+        approvalStatus:status
+      }
+    );
+
+
+    if(form.workerId){
+
+      await addDoc(
+        collection(
+          db,
+          "workerNotifications"
+        ),
+        {
+          workerId:form.workerId,
+          workerName:
+            form.workerName ||
+            "Worker",
+
+          type:
+            form.formType ||
+            "form",
+
+          referenceId:id,
+
+          title:
+            status === "approved"
+              ? "Form Approved"
+              : "Form Rejected",
+
+          message:
+            status === "approved"
+              ? `Your ${form.title || "submitted form"} has been approved.`
+              : `Your ${form.title || "submitted form"} was rejected by administration.`,
+
+          read:false,
+
+          createdAt:
+            serverTimestamp()
+        }
+      );
+    }
+
+
+    toast(
+      status === "approved"
+        ? "Form approved"
+        : "Form rejected"
+    );
+
+    await loadStaffData();
+    await loadLoanRequests();
+    await counts();
+
+  }catch(e){
+
+    console.error(e);
+
+    toast(
+      "Could not update form"
+    );
+  }
+}
+
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+function renderMessages(){
+
+  $("messagesList").innerHTML =
+    messages.length
+
+      ? messages.map(x => `
+
+        <div class="operation">
+
+          <div>
+
+            <strong>
+              ${
+                x.senderRole === "admin"
+                  ? "Administrator"
+                  : "Worker"
+              }
+            </strong>
+
+            <small>
+              ${esc(x.text || "")}
+              <br>
+              ${dt(x.createdAt)}
+            </small>
+
+          </div>
+
+        </div>
+
+      `).join("")
+
+      : `
+        <div class="empty">
+          No messages yet.
+        </div>
+      `;
+}
+
+
+$("sendMessageBtn").onclick =
+  async () => {
+
+    const text =
+      $("messageText")
+        .value
+        .trim();
+
+    if(!text || !selected)
+      return;
+
+    try{
+
+      await addDoc(
+        collection(
+          db,
+          "workerMessages"
+        ),
+        {
+          workerId:selected.uid,
+
+          workerName:
+            selected.name ||
+            selected.username ||
+            selected.email ||
+            "Worker",
+
+          senderId:
+            admin.uid,
+
+          senderRole:
+            "admin",
+
+          text,
+
+          createdAt:
+            serverTimestamp()
+        }
+      );
+
+
+      $("messageText").value = "";
+
+      toast("Message sent");
+
+      await loadStaffData();
+
+    }catch(e){
+
+      console.error(e);
+
+      toast(
+        "Message could not be sent"
+      );
+    }
+  };
+
+
+/* =========================================================
+   TRANSFER CUSTOMER
+   ========================================================= */
+
+function renderTransfer(){
+
+  $("transferCustomer").innerHTML =
+    '<option value="">Select customer...</option>' +
+
+    customers
+      .map(x => {
+
+        const b =
+          x.borrower || x;
+
+        return `
+          <option value="${esc(x.id)}">
+            ${esc(
+              b.name ||
+              "Customer"
+            )}
+            —
+            ${esc(
+              b.phone ||
+              ""
+            )}
+          </option>
+        `;
+
+      })
+      .join("");
+}
+
+
+$("transferBtn").onclick =
+  async () => {
+
+    const cid =
+      $("transferCustomer").value;
+
+    const wid =
+      $("transferWorker").value;
+
+
+    if(!cid || !wid){
+
+      toast(
+        "Select a customer and staff member"
+      );
+
+      return;
+    }
+
+
+    const target =
+      staff.find(
+        x => x.uid === wid
+      );
+
+    const old =
+      customers.find(
+        x => x.id === cid
+      );
+
+
+    if(!target || !old)
+      return;
+
+
+    try{
+
+      const ref =
+        doc(
+          db,
+          "workerBorrowers",
+          cid
+        );
+
+      const b =
+        {
+          ...(old.borrower || old)
+        };
+
+      const workerName =
+        target.name ||
+        target.username ||
+        target.email ||
+        "Worker";
+
+      const oldWorkerId =
+        selected.uid;
+
+
+      await updateDoc(
+        ref,
+        {
+          workerId:wid,
+          workerName,
+
+          borrower:{
+            ...b,
+            workerId:wid,
+            workerName
+          },
+
+          updatedAt:
+            serverTimestamp()
+        }
+      );
+
+
+      /*
+       * Keep each worker's customer profile
+       * list aligned with the transferred borrower.
+       */
+
+      try{
+
+        const oldSnap =
+          await getDoc(
+            doc(
+              db,
+              "users",
+              oldWorkerId
+            )
+          );
+
+        const newSnap =
+          await getDoc(
+            doc(
+              db,
+              "users",
+              wid
+            )
+          );
+
+
+        const oldCustomers =
+          Array.isArray(
+            oldSnap.data()?.customers
+          )
+            ? oldSnap.data().customers.slice()
+            : [];
+
+
+        const newCustomers =
+          Array.isArray(
+            newSnap.data()?.customers
+          )
+            ? newSnap.data().customers.slice()
+            : [];
+
+
+        const match = c =>
+          String(
+            c.borrowerId || ""
+          ) ===
+          String(
+            b.id || ""
+          ) ||
+
+          String(
+            c.phone || ""
+          ).replace(/\D/g,"") ===
+          String(
+            b.phone || ""
+          ).replace(/\D/g,"");
+
+
+        const movedCustomer = {
+
+          id:
+            b.customerId ||
+            "MW-C" + Date.now(),
+
+          name:
+            b.name ||
+            "Customer",
+
+          phone:
+            b.phone ||
+            "",
+
+          passport:
+            b.passport ||
+            "",
+
+          residentialAddress:
+            b.residentialAddress ||
+            "",
+
+          workshopAddress:
+            b.workshopAddress ||
+            "",
+
+          guarantorName:
+            b.guarantorName ||
+            "",
+
+          guarantorPhone:
+            b.guarantorPhone ||
+            "",
+
+          borrowerId:
+            b.id ||
+            "",
+
+          loanStatus:
+            "APPROVED",
+
+          updatedAt:
+            new Date().toISOString(),
+
+          createdAt:
+            new Date().toISOString()
+        };
+
+
+        const oldFiltered =
+          oldCustomers.filter(
+            c => !match(c)
+          );
+
+
+        const alreadyNew =
+          newCustomers.find(
+            match
+          );
+
+
+        if(alreadyNew){
+
+          Object.assign(
+            alreadyNew,
+            movedCustomer
+          );
+
+        }else{
+
+          newCustomers.unshift(
+            movedCustomer
+          );
+        }
+
+
+        await updateDoc(
+          doc(
+            db,
+            "users",
+            oldWorkerId
+          ),
+          {
+            customers:oldFiltered,
+            updatedAt:serverTimestamp()
+          }
+        );
+
+
+        await updateDoc(
+          doc(
+            db,
+            "users",
+            wid
+          ),
+          {
+            customers:newCustomers,
+            updatedAt:serverTimestamp()
+          }
+        );
+
+      }catch(customerSyncError){
+
+        console.warn(
+          "Worker customer profile transfer sync failed:",
+          customerSyncError
+        );
+      }
+
+
+      await addDoc(
+        collection(
+          db,
+          "workerActivity"
+        ),
+        {
+          workerId:wid,
+          workerName,
+
+          targetName:
+            b.name ||
+            "Customer",
+
+          customerName:
+            b.name ||
+            "Customer",
+
+          action:
+            "Customer transferred",
+
+          details:
+            `Transferred from ${
+              selected.name ||
+              selected.username ||
+              "staff"
+            }`,
+
+          createdAt:
+            serverTimestamp()
+        }
+      );
+
+
+      await addDoc(
+        collection(
+          db,
+          "workerNotifications"
+        ),
+        {
+          workerId:wid,
+          workerName,
+
+          type:"transfer",
+
+          referenceId:cid,
+
+          title:
+            "Customer Transferred To You",
+
+          message:
+            `${b.name || "A customer"} has been transferred to your account by administration.`,
+
+          read:false,
+
+          createdAt:
+            serverTimestamp()
+        }
+      );
+
+
+      toast(
+        "Customer transferred successfully"
+      );
+
+      await loadStaffData();
+      await loadStaff();
+
+    }catch(e){
+
+      console.error(e);
+
+      toast(
+        "Transfer failed. Check Firestore rules"
+      );
+    }
+  };
+
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+function openProfile(){
+
+  const name =
+    $("adminName")?.textContent ||
+    admin?.displayName ||
+    admin?.email?.split("@")[0] ||
+    "Administrator";
+
+
+  $("profileUsername").textContent =
+    name;
+
+  $("profileUsernameInput").value =
+    name;
+
+  $("profileEmail").textContent =
+    admin?.email ||
+    "—";
+
+  $("profileModal")
+    .classList.add("open");
+}
+
+
+function closeProfile(){
+
+  $("profileModal")
+    ?.classList.remove("open");
+}
+
+
+window.closeProfile =
+  closeProfile;
+
+window.openProfile =
+  openProfile;
+
+
+$("profileBtn").onclick =
+  openProfile;
+
+$("topProfileBtn").onclick =
+  openProfile;
+
+
+$("adminLogoutBtn").onclick =
+  async () => {
+
+    try{
+
+      await signOut(auth);
+
+      window.location.href =
+        "index.html";
+
+    }catch(e){
+
+      console.error(e);
+
+      toast(
+        "Could not log out"
+      );
+    }
+  };
+
+
+$("profileForm").onsubmit =
+  async e => {
+
+    e.preventDefault();
+
+    const username =
+      $("profileUsernameInput")
+        .value
+        .trim();
+
+    if(!username || !admin)
+      return;
+
+
+    try{
+
+      await setDoc(
+        doc(
+          db,
+          "users",
+          admin.uid
+        ),
+        {
+          username,
+          displayName:username,
+          email:admin.email || "",
+          role:"admin",
+          updatedAt:serverTimestamp()
+        },
+        {
+          merge:true
+        }
+      );
+
+
+      await setDoc(
+        doc(
+          db,
+          "admins",
+          admin.uid
+        ),
+        {
+          username,
+          email:admin.email || "",
+          role:"admin",
+          updatedAt:serverTimestamp()
+        },
+        {
+          merge:true
+        }
+      );
+
+
+      $("adminName").textContent =
+        username;
+
+      $("adminAvatar").textContent =
+        initials(username);
+
+      $("topAdminAvatar").textContent =
+        initials(username);
+
+      $("profileUsername").textContent =
+        username;
+
+      toast(
+        "Username updated"
+      );
+
+    }catch(e){
+
+      console.error(e);
+
+      toast(
+        "Could not save username. Check Firestore rules"
+      );
+    }
+  };
+
+
+$("changeAdminPasswordBtn").onclick =
+  async () => {
+
+    const current =
+      $("currentAdminPassword").value;
+
+    const newPass =
+      $("newAdminPassword").value;
+
+
+    if(!admin?.email){
+
+      toast(
+        "No admin email is available"
+      );
+
+      return;
+    }
+
+
+    if(
+      !current ||
+      newPass.length < 6
+    ){
+
+      toast(
+        "Enter your current password and a new password of at least 6 characters"
+      );
+
+      return;
+    }
+
+
+    try{
+
+      const credential =
+        EmailAuthProvider.credential(
+          admin.email,
+          current
+        );
+
+
+      await reauthenticateWithCredential(
+        admin,
+        credential
+      );
+
+
+      await updatePassword(
+        admin,
+        newPass
+      );
+
+
+      $("currentAdminPassword").value =
+        "";
+
+      $("newAdminPassword").value =
+        "";
+
+      toast(
+        "Password changed successfully"
+      );
+
+    }catch(e){
+
+      console.error(e);
+
+      toast(
+        e?.code === "auth/wrong-password"
+
+          ? "Current password is incorrect"
+
+          : "Password could not be changed. If this admin uses Google sign-in, set a password login method first."
+      );
+    }
+  };
+
+
+/* =========================================================
+   ADMIN AUTHENTICATION
+   ========================================================= */
+
+setPersistence(
+  auth,
+  browserSessionPersistence
+)
+.then(() => {
+
+  onAuthStateChanged(
+    auth,
+    async user => {
+
+      if(!user){
+
+        toast(
+          "Please sign in as an administrator"
+        );
+
+        return;
+      }
+
+
+      admin = user;
+
+
+      try{
+
+        /*
+         * Firestore rules identify admins through
+         * admins/{uid}.role == "admin".
+         */
+
+        const adminSnap =
+          await getDoc(
+            doc(
+              db,
+              "admins",
+              user.uid
+            )
+          );
+
+
+        if(
+          !adminSnap.exists() ||
+          String(
+            adminSnap.data()?.role || ""
+          ).toLowerCase() !==
+          "admin"
+        ){
+
+          toast(
+            "This account is not registered as an administrator"
+          );
+
+          setTimeout(
+            () => signOut(auth),
+            1200
+          );
+
+          return;
+        }
+
+
+        /*
+         * Load the optional profile from users/{uid}
+         * only for the administrator's display name.
+         */
+
+        const profileSnap =
+          await getDoc(
+            doc(
+              db,
+              "users",
+              user.uid
+            )
+          );
+
+
+        const profile =
+          profileSnap.exists()
+            ? profileSnap.data()
+            : {};
+
+
+        const displayName =
+          profile.username ||
+          profile.displayName ||
+          adminSnap.data()?.username ||
+          user.displayName ||
+          user.email?.split("@")[0] ||
+          "Administrator";
+
+
+        $("adminName").textContent =
+          displayName;
+
+        $("adminAvatar").textContent =
+          initials(displayName);
+
+        $("topAdminAvatar").textContent =
+          initials(displayName);
+
+
+        startAdminNotifications();
+        startLoanFormListener();
+
+        await loadAll();
+
+      }catch(e){
+
+        console.error(
+          "Admin dashboard Firebase error:",
+          e
+        );
+
+        const message =
+          String(
+            e?.code ||
+            e?.message ||
+            ""
+          );
+
+
+        if(
+          message.includes(
+            "permission-denied"
+          )
+        ){
+
+          toast(
+            "Access denied. Make sure this UID has admins/{uid} with role: admin."
+          );
+
+        }else{
+
+          toast(
+            "Admin dashboard could not connect to Firestore"
+          );
+        }
+      }
+
+    }
+  );
+
+})
+.catch(e => {
+
+  console.error(
+    "Firebase authentication initialization failed:",
+    e
+  );
+
+  toast(
+    "Authentication could not start. Check the Firebase setup or browser connection."
+  );
+
+});
+
+
+/* =========================================================
+   GLOBAL FUNCTIONS NEEDED BY INLINE BUTTONS
+   ========================================================= */
+
+window.closeLoanReview =
+  closeLoanReview;
+
+window.openLoanReview =
+  openLoanReview;
+
+window.reviewLoanRequest =
+  reviewLoanRequest;
+
+window.loadStaff =
+  loadStaff;
+
+window.loadAll =
+  loadAll;
+
+window.openLoanRequest =
+  openLoanRequest;
+
+</script>
+
+</body>
+</html>

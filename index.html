@@ -1,0 +1,342 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIITY WALLET — Login & Sign Up</title>
+<style>
+:root{--darkest-green:#032b1d;--dark-green:#075c3c;--green:#0b7a4f;--mid-green:#16a86d;--bright-green:#35d18a;--light-green:#dff8eb;--pale-green:#f1fcf6;--white:#fff;--cream:#f5faf7;--text:#10281e;--muted:#6c8177;--border:#d8ebe1;--danger:#dc4c4c;--shadow:0 25px 70px rgba(3,55,35,.14)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif}
+body{min-height:100vh;background:radial-gradient(circle at 85% 10%,rgba(53,209,138,.16),transparent 28%),radial-gradient(circle at 10% 90%,rgba(22,168,109,.10),transparent 28%),var(--cream);display:flex;align-items:center;justify-content:center;padding:20px;color:var(--text)}
+.page{width:100%;max-width:1050px;min-height:640px;background:#fff;border-radius:28px;overflow:hidden;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 1fr;animation:entry .6s ease}
+@keyframes entry{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.brand{background:linear-gradient(145deg,#032b1d,#075c3c 52%,#16a86d);color:#fff;padding:52px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.brand:before{content:"";position:absolute;width:300px;height:300px;border:1px solid rgba(255,255,255,.12);border-radius:50%;right:-130px;top:-100px}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:48px;position:relative}.mark{width:52px;height:52px;border-radius:15px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:900}.logo strong{font-size:24px}.brand h1{font-size:45px;line-height:1.06;position:relative}.brand h1 span{color:#8df0bb}.brand p{margin-top:20px;max-width:410px;color:rgba(255,255,255,.78);line-height:1.7;font-size:15px;position:relative}.points{margin-top:34px;display:grid;gap:13px;position:relative}.point{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.88);font-size:13px}.point b{width:31px;height:31px;border-radius:9px;background:rgba(255,255,255,.12);display:grid;place-items:center}
+.form-panel{padding:50px;display:flex;align-items:center}.wrap{width:100%;max-width:410px;margin:auto}.head h2{font-size:31px;color:var(--darkest-green)}.head p{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.6}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--pale-green);padding:5px;border-radius:12px;margin:27px 0}.tab{border:0;background:transparent;padding:12px;border-radius:8px;font-weight:800;color:var(--muted);cursor:pointer}.tab.active{background:#fff;color:var(--green);box-shadow:0 4px 15px rgba(3,55,35,.08)}
+.form{display:none}.form.active{display:block}.field{margin-bottom:17px}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}.input{position:relative}.input input{width:100%;height:50px;border:1px solid var(--border);border-radius:12px;padding:0 44px 0 14px;outline:none;background:#fbfefc;font-size:14px}.input input:focus{border-color:var(--mid-green);box-shadow:0 0 0 4px rgba(22,168,109,.09);background:#fff}.eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--muted);font-size:13px;user-select:none}
+.btn{width:100%;height:52px;border:0;border-radius:12px;background:linear-gradient(135deg,#075c3c,#16a86d);color:#fff;font-weight:800;font-size:15px;cursor:pointer;margin-top:3px}.btn:disabled{opacity:.65;cursor:not-allowed}.switch{text-align:center;margin-top:19px;color:var(--muted);font-size:13px}.switch button,.forgot button{border:0;background:none;color:var(--green);font-weight:800;cursor:pointer}.forgot{text-align:right;margin:-4px 0 17px}.forgot button{font-size:12px}.msg{display:none;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.5;margin-bottom:16px;white-space:pre-line}.msg.show{display:block}.msg.ok{background:#e8f8ef;color:#12633f;border:1px solid #bce8d0}.msg.bad{background:#fff0f0;color:#a83232;border:1px solid #f2c2c2}.google-btn{width:100%;height:50px;border:1px solid var(--border);border-radius:12px;background:#fff;color:var(--text);font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px}.google-btn:hover{border-color:#b9d9c9;background:#fbfefc}.google-icon{width:19px;height:19px;display:grid;place-items:center;font-weight:900;font-size:18px}.divider{display:flex;align-items:center;gap:10px;margin:17px 0;color:#9aaaA1;font-size:11px}.divider:before,.divider:after{content:"";height:1px;background:var(--border);flex:1}.security{text-align:center;margin-top:22px;font-size:11px;color:#8a9a92}
+@media(max-width:820px){.page{grid-template-columns:1fr;max-width:520px}.brand{padding:35px;min-height:310px}.brand h1{font-size:35px}.logo{margin-bottom:28px}.form-panel{padding:35px 25px}}
+@media(max-width:480px){body{padding:10px}.brand{padding:27px 22px}.form-panel{padding:28px 19px}.head h2{font-size:27px}}
+</style>
+</head>
+<body>
+<div id="sessionChecking" style="position:fixed;inset:0;background:#f5faf7;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;transition:opacity .25s ease">
+  <div style="width:min(360px,100%);background:#fff;border:1px solid #d8ebe1;border-radius:18px;padding:28px;text-align:center;box-shadow:0 20px 55px rgba(3,55,35,.12)">
+    <div style="font-size:22px;font-weight:900;color:#075c3c;letter-spacing:.2px">MIITY WALLET</div>
+    <div style="margin-top:8px;color:#6c8177;font-size:13px">Checking your secure session...</div>
+  </div>
+</div>
+<div class="page">
+<section class="brand">
+<div class="logo"><div class="mark">M</div><strong>MIITY WALLET</strong></div>
+<h1>Welcome to<br><span>MIITY WALLET</span></h1>
+<p>Sign in or create your account to access your personalized MIITY WALLET dashboard.</p>
+<div class="points">
+<div class="point"><b>✓</b>Secure Firebase authentication</div>
+<div class="point"><b>✓</b>Personalized dashboard access</div>
+<div class="point"><b>✓</b>Your username stays connected to your account</div>
+</div>
+</section>
+<section class="form-panel">
+<div class="wrap">
+<div class="head"><h2 id="title">Welcome Back</h2><p id="subtitle">Sign in to continue to your dashboard.</p></div>
+<div class="tabs">
+<button class="tab active" id="loginTab" type="button" onclick="showLogin()">Login</button>
+<button class="tab" id="signupTab" type="button" onclick="showSignup()">Create Account</button>
+</div>
+<div class="msg" id="msg"></div>
+<form class="form active" id="loginForm" onsubmit="loginUser(event)">
+<div class="field"><label>Username / Email Address</label><div class="input"><input id="loginEmail" type="email" autocomplete="email" placeholder="Enter your email" required></div></div>
+<div class="field"><label>Password</label><div class="input"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter your password" required><span class="eye" onclick="togglePassword('loginPassword')">Show</span></div></div>
+<div class="forgot"><button type="button" onclick="resetPassword()">Forgot password?</button></div>
+<button class="btn" id="loginButton" type="submit">Sign In</button>
+<div class="divider"><span>OR</span></div>
+<button class="google-btn" id="googleLoginButton" type="button" onclick="googleSignIn()"><span class="google-icon">G</span> Continue with Google</button>
+<div class="switch">Don't have an account? <button type="button" onclick="showSignup()">Create one</button></div>
+</form>
+<form class="form" id="signupForm" onsubmit="signupUser(event)">
+<div class="field"><label>Username</label><div class="input"><input id="signupUsername" type="text" minlength="2" maxlength="40" autocomplete="username" placeholder="Choose a username" required></div></div>
+<div class="field"><label>Email Address</label><div class="input"><input id="signupEmail" type="email" autocomplete="email" placeholder="Enter your email" required></div></div>
+<div class="field"><label>Password</label><div class="input"><input id="signupPassword" type="password" minlength="6" autocomplete="new-password" placeholder="Create a password" required><span class="eye" onclick="togglePassword('signupPassword')">Show</span></div></div>
+<div class="field"><label>Confirm Password</label><div class="input"><input id="signupConfirm" type="password" minlength="6" autocomplete="new-password" placeholder="Confirm your password" required><span class="eye" onclick="togglePassword('signupConfirm')">Show</span></div></div>
+<button class="btn" id="signupButton" type="submit">Create Account</button>
+<div class="divider"><span>OR</span></div>
+<button class="google-btn" id="googleSignupButton" type="button" onclick="googleSignIn()"><span class="google-icon">G</span> Sign up with Google</button>
+<div class="switch">Already have an account? <button type="button" onclick="showLogin()">Sign in</button></div>
+</form>
+<div class="security">🔒 Authentication is handled securely by Firebase.</div>
+</div>
+</section>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import{initializeAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,sendPasswordResetEmail,updateProfile,indexedDBLocalPersistence,browserLocalPersistence,browserPopupRedirectResolver,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import{getFirestore,doc,getDocFromServer,setDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+const firebaseConfig={apiKey:"AIzaSyBbt239K7C1xnYG24rJpX4BIvt5IrmzxL8",authDomain:"worker-wallet.firebaseapp.com",projectId:"worker-wallet",storageBucket:"worker-wallet.firebasestorage.app",messagingSenderId:"136894935089",appId:"1:136894935089:web:573764933dd07437eea510",measurementId:"G-ESDSP8QM2G"};
+const app=initializeApp(firebaseConfig),auth=initializeAuth(app,{persistence:[indexedDBLocalPersistence,browserLocalPersistence],popupRedirectResolver:browserPopupRedirectResolver}),db=getFirestore(app);
+
+/* IMPORTANT: this matches the corrected file you were given. */
+const ADMIN_DASHBOARD="admin.html";
+const WORKER_DASHBOARD="dashboard.html";
+
+const $=id=>document.getElementById(id);
+function message(text,type="bad"){const m=$("msg");m.textContent=text;m.className="msg show "+(type==="ok"?"ok":"bad")}
+function clearMessage(){$("msg").className="msg";$("msg").textContent=""}
+
+
+// Keep users signed in between app/browser launches.
+// Firebase stores the authentication session locally; we never store passwords.
+let sessionResolved=false;
+let sessionRedirecting=false;
+
+async function routeAuthenticatedUser(user){
+  if(!user || sessionRedirecting)return;
+  sessionRedirecting=true;
+
+  const uid=user.uid;
+  try{sessionStorage.setItem("mw_session_account_uid",uid)}catch(e){}
+
+  try{
+    // Check the worker profile first.
+    const workerRef=doc(db,"users",uid);
+    const workerSnap=await getDocFromServer(workerRef);
+
+    if(workerSnap.exists() && ["worker","staff"].includes(
+      String(workerSnap.data().role||"").toLowerCase().trim()
+    )){
+      window.location.replace(WORKER_DASHBOARD);
+      return;
+    }
+
+    // If it is not a worker, check the admin record.
+    const adminRef=doc(db,"admins",uid);
+    const adminSnap=await getDocFromServer(adminRef);
+
+    if(adminSnap.exists() &&
+       String(adminSnap.data().role||"").toLowerCase().trim()==="admin"){
+      window.location.replace(ADMIN_DASHBOARD);
+      return;
+    }
+
+    // Authenticated but not assigned an approved role.
+    sessionRedirecting=false;
+    message("Your account is signed in, but it has not been assigned an approved MIITY WALLET role.");
+  }catch(error){
+    console.error("SESSION RESTORE ERROR:",error);
+    sessionRedirecting=false;
+    message("Your saved session was found, but your account role could not be verified. Please check your connection and try again.");
+  }
+}
+
+// Safety fallback: never leave the app stuck on the session-check screen.
+const sessionCheckTimeout=setTimeout(()=>{
+  const overlay=$("sessionChecking");
+  if(overlay && !sessionResolved){
+    overlay.style.opacity="0";
+    setTimeout(()=>overlay.remove(),260);
+    message("We could not verify your saved session. You can sign in normally.");
+  }
+},8000);
+
+onAuthStateChanged(auth, async user=>{
+  sessionResolved=true;
+  clearTimeout(sessionCheckTimeout);
+
+  const overlay=$("sessionChecking");
+  if(overlay){
+    overlay.style.opacity="0";
+    setTimeout(()=>overlay.remove(),260);
+  }
+
+  if(user){
+    await routeAuthenticatedUser(user);
+  }
+});
+
+window.showLogin=()=>{$("loginForm").classList.add("active");$("signupForm").classList.remove("active");$("loginTab").classList.add("active");$("signupTab").classList.remove("active");$("title").textContent="Welcome Back";$("subtitle").textContent="Sign in to continue to your dashboard.";clearMessage()};
+window.showSignup=()=>{$("signupForm").classList.add("active");$("loginForm").classList.remove("active");$("signupTab").classList.add("active");$("loginTab").classList.remove("active");$("title").textContent="Create Account";$("subtitle").textContent="Create your MIITY WALLET account to get started.";clearMessage()};
+window.togglePassword=id=>{const input=$(id),eye=input.parentElement.querySelector(".eye");if(input.type==="password"){input.type="text";eye.textContent="Hide"}else{input.type="password";eye.textContent="Show"}};
+
+window.signupUser=async event=>{
+event.preventDefault();clearMessage();
+const username=$("signupUsername").value.trim(),email=$("signupEmail").value.trim(),password=$("signupPassword").value,confirm=$("signupConfirm").value;
+if(username.length<2)return message("Please enter a username with at least 2 characters.");
+if(password.length<6)return message("Your password must contain at least 6 characters.");
+if(password!==confirm)return message("The passwords do not match.");
+const button=$("signupButton");button.disabled=true;button.textContent="Creating Account...";
+try{
+const credential=await createUserWithEmailAndPassword(auth,email,password),user=credential.user;
+console.log("[MIITY DEBUG] Account created. UID:",user.uid,"| username entered:",username);
+try{sessionStorage.setItem("mw_session_account_uid",user.uid)}catch(e){}
+await updateProfile(user,{displayName:username});
+console.log("[MIITY DEBUG] Firebase Auth displayName set to:",username);
+const profileRef=doc(db,"users",user.uid);
+await setDoc(profileRef,{
+  uid:user.uid,
+  username:username,
+  displayName:username,
+  email:user.email,
+  role:"worker",
+  status:"offline",
+  createdAt:serverTimestamp(),
+  lastActive:serverTimestamp()
+},{merge:false});
+
+// Verify that the worker profile was actually written before continuing.
+const savedProfile=await getDocFromServer(profileRef);
+if(!savedProfile.exists()){
+  throw new Error("FIRESTORE_PROFILE_NOT_CREATED");
+}
+console.log("[MIITY DEBUG] Verified Firestore doc users/"+user.uid+":",savedProfile.data());
+
+message("Account created and saved to Firebase successfully. Opening your dashboard...","ok");
+setTimeout(()=>window.location.replace(WORKER_DASHBOARD),700);
+}catch(error){
+console.error("SIGNUP ERROR:",error);
+let text="Unable to create your account.";
+if(error.code==="auth/email-already-in-use")text="An account with this email already exists. Please sign in.";
+else if(error.code==="auth/invalid-email")text="Please enter a valid email address.";
+else if(error.code==="auth/weak-password")text="Your password is too weak. Please choose a stronger password.";
+else if(error.code==="auth/network-request-failed")text="Network error. Please check your internet connection.";
+else if(error.message==="FIRESTORE_PROFILE_NOT_CREATED")text="Firebase Authentication created the account, but the worker profile was not saved in Firestore.";
+else if(error.code==="permission-denied"||error.message?.includes("Missing or insufficient permissions"))text="The account was created in Firebase Authentication, but Firestore blocked users/{uid}. Please publish the MIITY WALLET Firestore rules.";
+message(text);
+}finally{button.disabled=false;button.textContent="Create Account"}
+};
+
+window.loginUser=async event=>{
+event.preventDefault();clearMessage();
+const email=$("loginEmail").value.trim(),password=$("loginPassword").value;
+if(!email||!password)return message("Please enter your email and password.");
+const button=$("loginButton");button.disabled=true;button.textContent="Signing In...";
+try{
+const credential=await signInWithEmailAndPassword(auth,email,password),user=credential.user,uid=user.uid;
+try{sessionStorage.setItem("mw_session_account_uid",uid)}catch(e){}
+console.log("Firebase authentication successful. UID:",uid);
+    // Check the worker profile first. Workers can read their own users/{uid}
+    // document, but they cannot read admins/{uid}.
+    const workerRef=doc(db,"users",uid);
+    const workerSnap=await getDocFromServer(workerRef);
+    console.log("Worker document:",`users/${uid}`,"exists:",workerSnap.exists());
+
+    if(workerSnap.exists()&&["worker","staff"].includes(String(workerSnap.data().role||"").toLowerCase().trim())){
+      message("Worker login successful. Opening your dashboard...","ok");
+      setTimeout(()=>window.location.replace(WORKER_DASHBOARD),500);
+      return;
+    }
+
+    // Only check admins/{uid} after confirming the account is not a worker.
+    const adminRef=doc(db,"admins",uid);
+    const adminSnap=await getDocFromServer(adminRef);
+    console.log("Admin document:",`admins/${uid}`,"exists:",adminSnap.exists());
+
+    if(adminSnap.exists()&&String(adminSnap.data().role||"").toLowerCase().trim()==="admin"){
+      message("Admin login successful. Opening the admin dashboard...","ok");
+      setTimeout(()=>window.location.replace(ADMIN_DASHBOARD),500);
+      return;
+    }
+
+message("Firebase authentication succeeded, but no approved MIITY WALLET role was found.\n\nFirebase UID: "+uid+"\n\nAdmin document checked: admins/"+uid+"\nResult: "+(adminSnap.exists()?"FOUND":"NOT FOUND")+"\n\nWorker document checked: users/"+uid+"\nResult: "+(workerSnap.exists()?"FOUND":"NOT FOUND")+"\n\nFor an ADMIN account, use admins/"+uid+" with role = admin.");
+}catch(error){
+console.error("LOGIN ERROR:",error);
+let text="Unable to sign in. Please check your email and password.";
+if(error.code==="auth/invalid-email")text="Please enter a valid email address.";
+else if(error.code==="auth/invalid-credential"||error.code==="auth/user-not-found"||error.code==="auth/wrong-password")text="The email or password is incorrect.";
+else if(error.code==="auth/too-many-requests")text="Too many attempts. Please wait and try again.";
+else if(error.code==="auth/network-request-failed")text="Network error. Please check your internet connection.";
+else if(error.code==="permission-denied"||error.message?.includes("Missing or insufficient permissions"))text="Firebase authentication succeeded, but Firestore denied access to the role document. Please check your Firestore security rules.";
+message(text);
+}finally{button.disabled=false;button.textContent="Sign In"}
+};
+
+window.googleSignIn=async()=>{
+  clearMessage();
+  const loginButton=$("googleLoginButton"),signupButton=$("googleSignupButton");
+  if(loginButton)loginButton.disabled=true;
+  if(signupButton)signupButton.disabled=true;
+  if(loginButton)loginButton.innerHTML='<span class="google-icon">G</span> Connecting...';
+  if(signupButton)signupButton.innerHTML='<span class="google-icon">G</span> Connecting...';
+  try{
+        const provider=new GoogleAuthProvider();
+    provider.setCustomParameters({prompt:"select_account"});
+    const credential=await signInWithPopup(auth,provider);
+    const user=credential.user,uid=user.uid;
+    try{sessionStorage.setItem("mw_session_account_uid",uid)}catch(e){}
+    const profileRef=doc(db,"users",uid);
+    const profileSnap=await getDocFromServer(profileRef);
+
+    if(profileSnap.exists()){
+      const data=profileSnap.data()||{};
+      const role=String(data.role||"").toLowerCase().trim();
+
+      if(role==="admin"){
+        const adminRef=doc(db,"admins",uid);
+        const adminSnap=await getDocFromServer(adminRef);
+        if(adminSnap.exists()&&String(adminSnap.data().role||"").toLowerCase().trim()==="admin"){
+          message("Google sign-in successful. Opening the admin dashboard...","ok");
+          setTimeout(()=>window.location.replace(ADMIN_DASHBOARD),500);
+          return;
+        }
+        throw new Error("ADMIN_PROFILE_INVALID");
+      }
+
+      if(["worker","staff"].includes(role)){
+        message("Google sign-in successful. Opening your dashboard...","ok");
+        setTimeout(()=>window.location.replace(WORKER_DASHBOARD),500);
+        return;
+      }
+
+      // Existing profile without an approved role: keep its profile instead of
+      // silently changing the account's permissions.
+      throw new Error("ROLE_NOT_APPROVED");
+    }
+
+    // Brand-new Google account: create the worker profile once.
+    const username=(user.displayName||user.email?.split("@")[0]||"MIITY Worker").trim();
+    await setDoc(profileRef,{
+      uid:uid,
+      username:username,
+      displayName:username,
+      email:user.email||"",
+      photoURL:user.photoURL||"",
+      role:"worker",
+      status:"offline",
+      createdAt:serverTimestamp(),
+      lastActive:serverTimestamp(),
+      authProvider:"google"
+    },{merge:false});
+
+    const savedProfile=await getDocFromServer(profileRef);
+    if(!savedProfile.exists())throw new Error("FIRESTORE_PROFILE_NOT_CREATED");
+
+    message("Google account connected successfully. Opening your dashboard...","ok");
+    setTimeout(()=>window.location.replace(WORKER_DASHBOARD),700);
+  }catch(error){
+    console.error("GOOGLE SIGN-IN ERROR:",error);
+    let text="Unable to continue with Google.";
+    if(error.code==="auth/popup-closed-by-user")text="Google sign-in was cancelled.";
+    else if(error.code==="auth/popup-blocked")text="Your browser blocked the Google sign-in window. Please allow pop-ups for this site and try again.";
+    else if(error.code==="auth/account-exists-with-different-credential")text="An account already exists with this email using another sign-in method. Sign in with your existing method first.";
+    else if(error.code==="auth/network-request-failed")text="Network error. Please check your internet connection.";
+    else if(error.code==="permission-denied"||error.message?.includes("Missing or insufficient permissions"))text="Google authentication succeeded, but Firestore blocked the worker profile. Please publish the updated MIITY WALLET Firestore rules.";
+    else if(error.message==="ROLE_NOT_APPROVED")text="This Google account is authenticated, but its MIITY WALLET profile does not have an approved worker or staff role.";
+    else if(error.message==="ADMIN_PROFILE_INVALID")text="This Google account is marked as an admin, but its admin record is not approved.";
+    else if(error.message==="FIRESTORE_PROFILE_NOT_CREATED")text="Google authentication succeeded, but the worker profile could not be saved in Firestore.";
+    message(text);
+  }finally{
+    if(loginButton){loginButton.disabled=false;loginButton.innerHTML='<span class="google-icon">G</span> Continue with Google'}
+    if(signupButton){signupButton.disabled=false;signupButton.innerHTML='<span class="google-icon">G</span> Sign up with Google'}
+  }
+};
+
+window.resetPassword=async()=>{
+clearMessage();const email=$("loginEmail").value.trim();
+if(!email)return message("Enter your email first, then click Forgot password.");
+try{await sendPasswordResetEmail(auth,email);message("Password reset instructions have been sent to your email.","ok")}
+catch(error){console.error("PASSWORD RESET ERROR:",error);message("Unable to send the password reset email. Please check the email address.")}
+};
+</script>
+</body>
+</html>
